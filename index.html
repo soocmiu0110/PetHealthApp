@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetHealth - Premium Mobile App Experience</title>
+    <title>PetHealth Pro - Complete Ecosystem Experience</title>
     <style>
-        /* Modern App Styling - 100% English UI Elements */
         * {
             margin: 0;
             padding: 0;
@@ -13,29 +12,71 @@
             font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background-color: #f1f2f6;
+            background-color: #f5f6fa;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         
-        /* Premium Mobile Device Simulator Container */
+        /* Premium Smartphone Simulator frame with notch */
         .phone-wrapper {
             width: 375px;
-            height: 760px;
+            height: 780px;
             background: #f8f9fa;
             border: 12px solid #1e272e;
             border-radius: 45px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* VIRTUAL AUTH SCREEN (LOGIN & REGISTER) */
+        /* Virtual Phone Status Bar */
+        .status-bar {
+            height: 30px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2d3436;
+            z-index: 110;
+        }
+        .status-icons {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* LIVE NOTIFICATION TOAST */
+        .toast {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(47, 53, 66, 0.95);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 200;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ADVANCED AUTHENTICATION LAYER */
         .auth-screen {
             position: absolute;
             top: 0;
@@ -43,34 +84,21 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
-            z-index: 100;
+            z-index: 150;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 30px;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.5s ease-in-out;
         }
         .auth-screen.hidden {
             transform: translateY(-100%);
-        }
-        .auth-logo {
-            text-align: center;
-            color: white;
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
-        .auth-title {
-            color: white;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 30px;
         }
         .auth-box {
             background: white;
             padding: 25px;
             border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
         .auth-toggle {
             display: flex;
@@ -84,12 +112,11 @@
             padding: 8px;
             border: none;
             background: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 13px;
             cursor: pointer;
             border-radius: 10px;
             color: #747d8c;
-            transition: all 0.2s;
         }
         .auth-toggle button.active {
             background: white;
@@ -97,20 +124,21 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* MAIN APP HEADER */
+        /* HEADER FRAME */
         header {
             background-color: #ffffff;
             color: #2d3436;
-            padding: 30px 20px 15px 20px;
+            padding: 10px 20px 15px 20px;
             text-align: left;
             font-size: 22px;
             font-weight: 800;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.02);
         }
         .logout-top-btn {
-            background: #ffeaa7;
+            background: #fff0f0;
             color: #d63031;
             border: none;
             padding: 6px 12px;
@@ -120,34 +148,36 @@
             cursor: pointer;
         }
 
+        /* MAIN ACTION SCROLL AREA */
         .content-container {
             flex: 1;
             overflow-y: auto;
             padding: 16px;
-            padding-bottom: 90px;
+            padding-bottom: 95px;
+            background-color: #f8f9fa;
         }
 
-        /* Smooth Page Transitions */
+        /* Smooth View Navigation Architecture */
         .page {
             display: none;
-            animation: slideUp 0.35s ease-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
         .page.active {
             display: block;
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Native Premium UI Cards */
+        /* Premium Native UI Elements */
         .card {
             background: #ffffff;
-            border-radius: 20px;
-            padding: 16px;
+            border-radius: 24px;
+            padding: 18px;
             margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
         }
         .card h2 {
             font-size: 15px;
@@ -158,14 +188,12 @@
             gap: 8px;
         }
 
-        /* Realistic Pet Action Images */
         .health-img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
-            border-radius: 16px;
+            border-radius: 18px;
             margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         /* Metrics Progress Elements */
@@ -173,7 +201,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
         }
         .counter-controls {
             display: flex;
@@ -181,8 +209,8 @@
             gap: 12px;
         }
         .btn-circle {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             border: none;
             background: #f1f2f6;
@@ -190,12 +218,12 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.1s ease;
         }
         .btn-circle:active {
             background: #6c5ce7;
             color: white;
-            transform: scale(0.92);
+            transform: scale(0.9);
         }
         .progress-container {
             width: 100%;
@@ -208,8 +236,30 @@
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, #00b894, #55efc4);
-            width: 41%;
+            width: 0%;
             transition: width 0.3s ease;
+        }
+
+        /* Schedule Action Items */
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f2f6;
+        }
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        .schedule-time {
+            background: #e8f4f8;
+            color: #0984e3;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 65px;
+            text-align: center;
         }
 
         /* Filter Tab Pills */
@@ -219,7 +269,7 @@
             margin-bottom: 16px;
         }
         .filter-pill {
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 14px;
             border: none;
             background-color: #e4e7eb;
@@ -227,12 +277,10 @@
             font-weight: 600;
             color: #57606f;
             cursor: pointer;
-            transition: all 0.2s;
         }
         .filter-pill.active {
             background-color: #6c5ce7;
             color: white;
-            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
         }
 
         /* Native Action Buttons */
@@ -247,21 +295,19 @@
             font-size: 14px;
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(108, 92, 231, 0.2);
-            transition: all 0.2s;
         }
         .btn-action:active {
-            transform: scale(0.97);
-            box-shadow: 0 3px 8px rgba(108, 92, 231, 0.1);
+            transform: scale(0.98);
         }
 
-        /* Native Mobile Bottom Navigation Bar */
+        /* Native Bottom Tab Layout Bar */
         nav.bottom-nav {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 75px;
-            background-color: rgba(255, 255, 255, 0.92);
+            background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(0,0,0,0.05);
             display: flex;
@@ -281,23 +327,18 @@
             background: none;
             border: none;
             width: 25%;
-            transition: all 0.2s;
         }
         .nav-item .icon {
-            font-size: 22px;
-            margin-bottom: 3px;
-            transition: transform 0.2s;
+            font-size: 20px;
+            margin-bottom: 2px;
         }
         .nav-item.active {
             color: #6c5ce7;
         }
-        .nav-item.active .icon {
-            transform: translateY(-2px);
-        }
 
-        /* Input Form Formatting */
+        /* Form Formatting */
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         label {
             display: block;
@@ -306,34 +347,22 @@
             font-size: 11px;
             color: #57606f;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        input {
+        input, select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 12px 14px;
             border: 1px solid #ced6e0;
             border-radius: 14px;
             outline: none;
             font-size: 14px;
             background-color: #f1f2f6;
-            transition: all 0.2s;
         }
         input:focus {
             border-color: #6c5ce7;
             background-color: white;
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
-        }
-        select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #ced6e0;
-            border-radius: 14px;
-            outline: none;
-            font-size: 14px;
-            background-color: #f1f2f6;
         }
 
-        .status-text { font-size: 13px; color: #2f3542; line-height: 1.5; }
+        .status-text { font-size: 12px; color: #57606f; line-height: 1.5; }
         .badge { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; color: white; float: right; }
         .bg-success { background-color: #2ed573; }
         .bg-warning { background-color: #ffa502; }
@@ -343,10 +372,19 @@
 
     <div class="phone-wrapper">
         
-        <!-- VIRTUAL SYSTEM AUTH SCREEN -->
+        <!-- TELEPHONY INTERFACE STATUS BAR -->
+        <div class="status-bar">
+            <span id="live-clock">09:41</span>
+            <div class="status-icons">📶 🪫 100%</div>
+        </div>
+
+        <!-- NOTIFICATION BANNER POPUP -->
+        <div id="toast-banner" class="toast">Action logged successfully!</div>
+        
+        <!-- VIRTUAL SYSTEM AUTH LAYER -->
         <div id="auth-screen" class="auth-screen">
-            <div class="auth-logo">🐾</div>
-            <div class="auth-title" id="auth-main-title">PetHealth App</div>
+            <div style="text-align: center; color: white; font-size: 42px; margin-bottom: 10px;">🐾</div>
+            <div class="auth-title" id="auth-main-title">PetHealth Cloud</div>
             
             <div class="auth-box">
                 <div class="auth-toggle">
@@ -355,44 +393,44 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="auth-email" value="student@university.edu" placeholder="name@domain.com">
+                    <label>Account Email</label>
+                    <input type="email" id="auth-email" value="user@domain.com" placeholder="name@domain.com">
                 </div>
                 
                 <div class="form-group" style="margin-bottom: 20px;">
-                    <label>Password</label>
+                    <label>Password Structure</label>
                     <input type="password" id="auth-password" value="123456" placeholder="••••••••">
                 </div>
                 
-                <button class="btn-action" id="btn-auth-submit" onclick="handleAuth()">Sign In to Account</button>
+                <button class="btn-action" id="btn-auth-submit" onclick="handleAuth()">Authorize Session</button>
             </div>
         </div>
 
-        <!-- MAIN INTERNAL APP NAVIGATION HEADER -->
+        <!-- MAIN INTERACTIVE APP MENU HEADER -->
         <header>
             <span id="app-title">Dashboard</span>
-            <button class="logout-top-btn" onclick="logout()">Log Out</button>
+            <button class="logout-top-btn" onclick="logout()">Disconnect</button>
         </header>
 
-        <!-- MAIN INTERACTIVE APP CONTAINER -->
+        <!-- APP CONTENT VIEWS HOLDER -->
         <div class="content-container">
             
-            <!-- VIEW TAB 1: HOME (DASHBOARD HUB) -->
+            <!-- VIEW TAB 1: DASHBOARD HUB -->
             <div id="page-home" class="page active">
                 <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Happy Dog Dashboard" class="health-img">
                 
                 <div class="card">
-                    <h2 id="welcome-msg">🐶 Welcome Back, Max!</h2>
-                    <p style="font-size: 13px; color: #57606f;">Your account is synced. Check your tracking summary and upcoming clinic shifts below.</p>
+                    <h2 id="welcome-msg">🐶 Profile: Max</h2>
+                    <p style="font-size: 12px; color: #747d8c;">All systems operational. Core parameters are currently cached locally on your hardware workspace.</p>
                 </div>
 
-                <!-- Interactive Habit Monitoring Logs -->
+                <!-- Habits Trackers Matrix -->
                 <div class="card">
-                    <h2>📊 Today's Metrics Log</h2>
+                    <h2>📊 Today's Vitals Tracker</h2>
                     
                     <div class="tracker-row">
                         <div>
-                            <span style="font-size: 13px; font-weight: 700;">Hydration Tracker</span>
+                            <span style="font-size: 13px; font-weight: 700;">Hydration Log</span>
                             <div style="font-size: 11px; color:#a4b0be;"><span id="water-val">250</span> / 600 mL</div>
                         </div>
                         <div class="counter-controls">
@@ -400,7 +438,7 @@
                             <button class="btn-circle" onclick="updateTracker('water', 50)">+</button>
                         </div>
                     </div>
-                    <div class="progress-container"><div id="water-bar" class="progress-bar" style="width: 41%;"></div></div>
+                    <div class="progress-container"><div id="water-bar" class="progress-bar"></div></div>
 
                     <div class="tracker-row" style="margin-top: 12px;">
                         <div>
@@ -412,93 +450,137 @@
                             <button class="btn-circle" onclick="updateTracker('food', 30)">+</button>
                         </div>
                     </div>
-                    <div class="progress-container"><div id="food-bar" class="progress-bar" style="width: 48%; background: linear-gradient(90deg, #ff7f50, #ff6b81);"></div></div>
+                    <div class="progress-container"><div id="food-bar" class="progress-bar" style="background: linear-gradient(90deg, #ff7f50, #ff6b81);"></div></div>
                 </div>
             </div>
 
-            <!-- VIEW TAB 2: HEALTH LABS (CLINICAL LOGS & IMAGES) -->
+            <!-- VIEW TAB 2: SCHEDULE SCHEDULES -->
+            <div id="page-schedule" class="page">
+                <div class="card">
+                    <h2>📅 Today's Clinical Schedule</h2>
+                    <p style="font-size: 12px; color: #747d8c; margin-bottom: 12px;">Automated cron jobs for medicine allocations and diet routines.</p>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">08:00 AM</div>
+                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Morning Heartworm Pill</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">12:30 PM</div>
+                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Post-Exercise Hydration Sweep</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">07:00 PM</div>
+                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Insulin Check Calibration</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW TAB 3: MEDICAL DIAGNOSTICS LABS -->
             <div id="page-health" class="page">
                 <div class="filter-container">
-                    <button class="filter-pill active" id="flt-all" onclick="filterVaccines('all')">All Logs</button>
-                    <button class="filter-pill" id="flt-comp" onclick="filterVaccines('completed')">Completed</button>
-                    <button class="filter-pill" id="flt-up" onclick="filterVaccines('upcoming')">Upcoming</button>
+                    <button class="filter-pill active" id="flt-all" onclick="filterVaccines('all')">All</button>
+                    <button class="filter-pill" id="flt-comp" onclick="filterVaccines('completed')">Done</button>
+                    <button class="filter-pill" id="flt-up" onclick="filterVaccines('upcoming')">Pending</button>
                 </div>
 
-                <!-- Case 1: Completed Vaccination Entry -->
                 <div class="card v-card" data-status="completed">
-                    <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=500&q=80" alt="Pet Vaccination Procedure" class="health-img">
+                    <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=500&q=80" alt="Pet Vaccination" class="health-img">
                     <h2>💉 Core DHPP Injection <span class="badge bg-success">Completed</span></h2>
-                    <p class="status-text" style="font-size: 12px; color: #57606f;">Immunization successfully administered by Dr. Sarah Jenkins at central laboratory clinic.</p>
+                    <p class="status-text">Immunization successfully administered by Dr. Sarah Jenkins at central laboratory clinic.</p>
                 </div>
                 
-                <!-- Case 2: Upcoming Diagnostic Schedule -->
                 <div class="card v-card" data-status="upcoming">
-                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=500&q=80" alt="Veterinary Medical Diagnostics" class="health-img">
+                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=500&q=80" alt="Veterinary Diagnostics" class="health-img">
                     <h2>🩺 Annual Rabies Booster <span class="badge bg-warning">Upcoming</span></h2>
-                    <p class="status-text" style="font-size: 12px; color: #57606f;">Scheduled screening window opens in 12 days. Please confirm your smart calendar appointment.</p>
+                    <p class="status-text">Scheduled screening window opens in 12 days. Please confirm your smart calendar appointment.</p>
                 </div>
 
-                <!-- Live BLE Automated Telemetry -->
                 <div class="card">
                     <h2>📡 Telemetry Diagnostic Scan</h2>
-                    <p class="status-text" style="font-size: 12px; color: #57606f; margin-bottom: 12px;">Trigger automated telemetry sweep from your pet's paired smart device collar hardware.</p>
+                    <p class="status-text" style="margin-bottom: 12px;">Trigger automated telemetry sweep from your pet's paired smart device collar hardware.</p>
                     <button class="btn-action" onclick="runAIScan()">Execute Telemetry Diagnostic</button>
                 </div>
             </div>
 
-            <!-- VIEW TAB 3: ACCOUNT PROFILE & CONFIGURATION -->
+            <!-- VIEW TAB 4: CONFIGURATION PARAMETERS PROFILE -->
             <div id="page-profile" class="page">
-                <div class="card" style="text-align: center; padding: 20px 10px;">
-                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Pet Profile Silhouette" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                    <h3 id="profile-display-name" style="color:#2d3436;">Max</h3>
-                    <p style="font-size: 12px; color:#a4b0be;">Registered Account Member</p>
+                <div class="card" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Cat Profile" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
+                    <h3 id="profile-display-name">Max</h3>
+                    <p style="font-size: 12px; color:#a4b0be;">Ecosystem Verified Account</p>
                 </div>
 
                 <div class="card">
-                    <h2>📝 Edit Profile Metrics</h2>
+                    <h2>📝 Update System Properties</h2>
                     <div class="form-group">
                         <label>Pet Identification Name</label>
                         <input type="text" id="input-pet-name" value="Max">
                     </div>
                     <div class="form-group">
-                        <label>Pet Species</label>
+                        <label>Pet Species Formula</label>
                         <select id="input-pet-type">
                             <option value="🐶">Dog (Canine)</option>
                             <option value="🐱">Cat (Feline)</option>
                             <option value="🐹">Other Small Mammal</option>
                         </select>
                     </div>
-                    <button class="btn-action" onclick="savePetProfile()">Apply & Sync Profile</button>
+                    <button class="btn-action" onclick="savePetProfile()">Sync Database Matrix</button>
                 </div>
             </div>
 
         </div>
 
-        <!-- MAIN SIMULATED TAB BAR CONTROLLERS -->
+        <!-- BOTTOM ICON TAB SELECTION NAVIGATION CONTROLLERS -->
         <nav class="bottom-nav">
             <button class="nav-item active" id="btn-nav-home" onclick="switchPage('home', 'Dashboard', this)">
-                <span class="icon">🏠</span>
-                <span>Home</span>
+                <span class="icon">🏠</span><span>Home</span>
+            </button>
+            <button class="nav-item" id="btn-nav-schedule" onclick="switchPage('schedule', 'Schedules', this)">
+                <span class="icon">📅</span><span>Schedule</span>
             </button>
             <button class="nav-item" id="btn-nav-health" onclick="switchPage('health', 'Medical Logs', this)">
-                <span class="icon">❤️</span>
-                <span>Health</span>
+                <span class="icon">❤️</span><span>Health</span>
             </button>
-            <button class="nav-item" id="btn-nav-profile" onclick="switchPage('profile', 'Account Profile', this)">
-                <span class="icon">👤</span>
-                <span>Profile</span>
+            <button class="nav-item" id="btn-nav-profile" onclick="switchPage('profile', 'Account', this)">
+                <span class="icon">👤</span><span>Profile</span>
             </button>
         </nav>
 
     </div>
 
-    <!-- MAIN JAVASCRIPT ARCHITECTURE CONTROLLER -->
+    <!-- PERSISTENT JAVASCRIPT STATE CONTROLLER WITH LOCALSTORAGE -->
     <script>
-        let currentWater = 250;
-        let currentFood = 120;
+        // State variables synced dynamically
+        let currentWater = parseInt(localStorage.getItem('pet_water')) || 250;
+        let currentFood = parseInt(localStorage.getItem('pet_food')) || 120;
+        let petName = localStorage.getItem('pet_name') || 'Max';
+        let petIcon = localStorage.getItem('pet_icon') || '🐶';
         let authMode = 'login';
 
-        // 1. Core Authentication Panel Switching Mode
+        // Initialize and setup dynamic text allocations on startup
+        window.onload = function() {
+            updateUIFields();
+            
+            // Simulating a real system smart digital clock updating
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('live-clock').innerText = 
+                    String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            }, 1000);
+
+            // Bypass authentication screen layout matrix if already logged in previously
+            if (localStorage.getItem('is_auth') === 'true') {
+                document.getElementById('auth-screen').classList.add('hidden');
+            }
+        };
+
+        function showToast(message) {
+            const banner = document.getElementById('toast-banner');
+            banner.innerText = message;
+            banner.classList.add('show');
+            setTimeout(() => banner.classList.remove('show'), 2500);
+        }
+
         function switchAuthMode(mode) {
             authMode = mode;
             document.getElementById('toggle-login').classList.remove('active');
@@ -506,60 +588,68 @@
             
             if (mode === 'login') {
                 document.getElementById('toggle-login').classList.add('active');
-                document.getElementById('btn-auth-submit').innerText = 'Sign In to Account';
-                document.getElementById('auth-main-title').innerText = 'PetHealth App';
+                document.getElementById('btn-auth-submit').innerText = 'Authorize Session';
             } else {
                 document.getElementById('toggle-register').classList.add('active');
-                document.getElementById('btn-auth-submit').innerText = 'Create Free Account';
-                document.getElementById('auth-main-title').innerText = 'Join PetHealth';
+                document.getElementById('btn-auth-submit').innerText = 'Instantiate Account Profile';
             }
         }
 
-        // 2. Authentication Submit Submission Verification
         function handleAuth() {
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
 
             if (!email || !password) {
-                alert('Please enter both your email address and password constants.');
+                alert('Validation Failure: Missing required email or string parameters.');
                 return;
             }
 
-            // Successfully hide login modal layout view
+            localStorage.setItem('is_auth', 'true');
             document.getElementById('auth-screen').classList.add('hidden');
+            showToast("Cloud synchronization successful!");
         }
 
-        // 3. Log Out Module Functionality
         function logout() {
+            localStorage.setItem('is_auth', 'false');
             document.getElementById('auth-screen').classList.remove('hidden');
+            showToast("Session disconnected.");
         }
 
-        // 4. Tab View Active Toggle Page Switches
         function switchPage(pageId, titleText, clickElement) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const selectedPage = document.getElementById('page-' + pageId);
             if (selectedPage) selectedPage.classList.add('active');
 
             document.getElementById('app-title').innerText = titleText;
-
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             clickElement.classList.add('active');
         }
 
-        // 5. Value Increments Habits Logic Counter
         function updateTracker(type, amount) {
             if (type === 'water') {
                 currentWater = Math.max(0, Math.min(600, currentWater + amount));
-                document.getElementById('water-val').innerText = currentWater;
-                document.getElementById('water-bar').style.width = (currentWater / 600 * 100) + '%';
+                localStorage.setItem('pet_water', currentWater);
             } else if (type === 'food') {
                 currentFood = Math.max(0, Math.min(250, currentFood + amount));
-                document.getElementById('food-val').innerText = currentFood;
-                document.getElementById('food-bar').style.width = (currentFood / 250 * 100) + '%';
+                localStorage.setItem('pet_food', currentFood);
             }
+            updateUIFields();
+            showToast(`Metrics mutated: updated ${type} intake profile.`);
         }
 
-        // 6. Medical Records Query Sorting Filter
+        function updateUIFields() {
+            document.getElementById('water-val').innerText = currentWater;
+            document.getElementById('water-bar').style.width = (currentWater / 600 * 100) + '%';
+            
+            document.getElementById('food-val').innerText = currentFood;
+            document.getElementById('food-bar').style.width = (currentFood / 250 * 100) + '%';
+
+            document.getElementById('welcome-msg').innerText = `${petIcon} Profile: ${petName}`;
+            document.getElementById('profile-display-name').innerText = petName;
+            document.getElementById('input-pet-name').value = petName;
+            document.getElementById('input-pet-type').value = petIcon;
+        }
+
         function filterVaccines(status) {
             document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
             if(status === 'all') document.getElementById('flt-all').classList.add('active');
@@ -567,27 +657,26 @@
             if(status === 'upcoming') document.getElementById('flt-up').classList.add('active');
 
             document.querySelectorAll('.v-card').forEach(card => {
-                if (status === 'all' || card.getAttribute('data-status') === status) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (status === 'all' || card.getAttribute('data-status') === status) ? 'block' : 'none';
             });
         }
 
-        // 7. Dynamic Internal Data Synchronization Matrix
         function savePetProfile() {
-            const name = document.getElementById('input-pet-name').value.trim() || 'your pet';
-            const icon = document.getElementById('input-pet-type').value;
+            petName = document.getElementById('input-pet-name').value.trim() || 'Max';
+            petIcon = document.getElementById('input-pet-type').value;
             
-            document.getElementById('welcome-msg').innerText = `${icon} Welcome Back, ${name}!`;
-            document.getElementById('profile-display-name').innerText = name;
-            alert(`Profile updated! Changes synced to your Home Dashboard metrics.`);
+            localStorage.setItem('pet_name', petName);
+            localStorage.setItem('pet_icon', petIcon);
+            
+            updateUIFields();
+            showToast("Properties synced to persistent matrix cache!");
         }
 
-        // 8. Automated Bluetooth Simulation Alerts
         function runAIScan() {
-            alert("Pairing device constants over Bluetooth BLE...\n\nDiagnostic Analytics:\n• Heart Rate: 88 BPM (Healthy Range)\n• Hydration Index: Nominal\n• Activity Logs: Active");
+            showToast("Initializing telemetry scanning diagnostics...");
+            setTimeout(() => {
+                alert("Pairing device constants over Bluetooth BLE...\n\nDiagnostic Analytics:\n• Heart Rate: 88 BPM (Healthy Range)\n• Hydration Index: Nominal\n• Activity Logs: Active");
+            }, 600);
         }
     </script>
 </body>
