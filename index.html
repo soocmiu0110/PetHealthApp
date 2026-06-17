@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetHealth Pro - Complete Ecosystem Experience</title>
+    <title>PetCare Super Pro</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
-            background-color: #f5f6fa;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,7 +21,7 @@
             padding: 10px;
         }
         
-        /* Premium Smartphone Simulator frame with notch */
+        /* Phone Simulator */
         .phone-wrapper {
             width: 375px;
             height: 780px;
@@ -34,62 +35,57 @@
             overflow: hidden;
         }
 
-        /* Virtual Phone Status Bar */
+        /* Status Bar */
         .status-bar {
-            height: 30px;
+            height: 35px;
             background: #ffffff;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 24px;
-            font-size: 12px;
+            padding: 10px 24px 0 24px;
+            font-size: 13px;
             font-weight: 600;
             color: #2d3436;
             z-index: 110;
         }
-        .status-icons {
-            display: flex;
-            gap: 4px;
-        }
 
-        /* LIVE NOTIFICATION TOAST */
+        /* Toast Alert Animation */
         .toast {
             position: absolute;
-            bottom: 90px;
+            bottom: 95px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: rgba(47, 53, 66, 0.95);
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 13px;
             font-weight: 600;
             z-index: 200;
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             white-space: nowrap;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ADVANCED AUTHENTICATION LAYER */
+        /* Slide-up Auth Screen Animation */
         .auth-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            background: linear-gradient(135deg, #ff7675 0%, #e17055 100%);
             z-index: 150;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 30px;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
         }
         .auth-screen.hidden {
             transform: translateY(-100%);
@@ -97,7 +93,7 @@
         .auth-box {
             background: white;
             padding: 25px;
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
         .auth-toggle {
@@ -105,188 +101,95 @@
             margin-bottom: 20px;
             background: #f1f2f6;
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 14px;
         }
         .auth-toggle button {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: none;
             background: none;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             border-radius: 10px;
             color: #747d8c;
+            transition: all 0.2s ease;
         }
         .auth-toggle button.active {
             background: white;
-            color: #6c5ce7;
+            color: #ff7675;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* HEADER FRAME */
+        /* App Header */
         header {
             background-color: #ffffff;
             color: #2d3436;
             padding: 10px 20px 15px 20px;
-            text-align: left;
             font-size: 22px;
             font-weight: 800;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.02);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
         }
-        .logout-top-btn {
+        .logout-btn {
             background: #fff0f0;
             color: #d63031;
             border: none;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 8px 14px;
+            border-radius: 14px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
+        .logout-btn:active { transform: scale(0.9); }
 
-        /* MAIN ACTION SCROLL AREA */
+        /* Container & Page Transition Animations */
         .content-container {
             flex: 1;
             overflow-y: auto;
             padding: 16px;
             padding-bottom: 95px;
             background-color: #f8f9fa;
+            position: relative;
         }
-
-        /* Smooth View Navigation Architecture */
         .page {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            width: 100%;
         }
         .page.active {
             display: block;
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Premium Native UI Elements */
+        /* UI Accessible Cards */
         .card {
             background: #ffffff;
             border-radius: 24px;
             padding: 18px;
             margin-bottom: 16px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
             border: 1px solid rgba(0,0,0,0.01);
         }
         .card h2 {
-            font-size: 15px;
-            color: #2d3436;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .health-img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 18px;
-            margin-bottom: 12px;
-        }
-
-        /* Metrics Progress Elements */
-        .tracker-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-        }
-        .counter-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .btn-circle {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: none;
-            background: #f1f2f6;
-            color: #2d3436;
             font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.1s ease;
-        }
-        .btn-circle:active {
-            background: #6c5ce7;
-            color: white;
-            transform: scale(0.9);
-        }
-        .progress-container {
-            width: 100%;
-            background-color: #f1f2f6;
-            border-radius: 10px;
-            height: 8px;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #00b894, #55efc4);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Schedule Action Items */
-        .schedule-item {
+            color: #2d3436;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f2f6;
-        }
-        .schedule-item:last-child {
-            border-bottom: none;
-        }
-        .schedule-time {
-            background: #e8f4f8;
-            color: #0984e3;
-            padding: 6px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            min-width: 65px;
-            text-align: center;
-        }
-
-        /* Filter Tab Pills */
-        .filter-container {
-            display: flex;
             gap: 8px;
-            margin-bottom: 16px;
-        }
-        .filter-pill {
-            padding: 8px 14px;
-            border-radius: 14px;
-            border: none;
-            background-color: #e4e7eb;
-            font-size: 12px;
-            font-weight: 600;
-            color: #57606f;
-            cursor: pointer;
-        }
-        .filter-pill.active {
-            background-color: #6c5ce7;
-            color: white;
         }
 
-        /* Native Action Buttons */
+        /* Tactile Action Buttons with Micro-interactions */
         .btn-action {
             width: 100%;
-            background: linear-gradient(135deg, #6c5ce7 0%, #5b4cc4 100%);
+            background: #ff7675;
             color: white;
             border: none;
             padding: 14px;
@@ -294,21 +197,124 @@
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(108, 92, 231, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 118, 117, 0.2);
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .btn-action:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
+            background: #e17055;
+        }
+        .btn-log {
+            background: #ffeaa7;
+            color: #d35400;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .btn-log:active { transform: scale(0.92); }
+
+        /* Smooth Toggle Switch Animation */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ced6e0;
+            transition: .3s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #2ed573; }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Care Row Layout */
+        .care-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f2f6;
+        }
+        .care-row:last-child { border-bottom: none; }
+        .care-info h4 { font-size: 14px; color: #2d3436; }
+        .care-info p { font-size: 12px; color: #a4b0be; margin-top: 2px; }
+
+        /* Dynamic Care History List */
+        .history-list {
+            margin-top: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #747d8c;
+        }
+        .history-item {
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f6fa;
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* Native Bottom Tab Layout Bar */
+        /* Smart Reminders Style */
+        .reminder-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: #fff9db;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            border-left: 5px solid #f59f00;
+        }
+
+        /* Forms Styling */
+        .form-group { margin-bottom: 14px; }
+        label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 12px; color: #57606f; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced6e0;
+            border-radius: 14px;
+            outline: none;
+            font-size: 14px;
+            background-color: #f1f2f6;
+            transition: all 0.2s ease;
+        }
+        input:focus { border-color: #ff7675; background-color: white; }
+
+        /* Photos Section Layout */
+        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+        .photo-item { background: #f1f2f6; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .photo-item img { width: 100%; height: 110px; object-fit: cover; display: block; }
+        .photo-label { font-size: 11px; font-weight: 700; padding: 8px; text-align: center; background: white; color: #2d3436; }
+
+        /* Bottom Tab Bar with Active Indicator Animation */
         nav.bottom-nav {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 75px;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background-color: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-around;
@@ -327,356 +333,380 @@
             background: none;
             border: none;
             width: 25%;
+            transition: color 0.2s ease;
         }
-        .nav-item .icon {
-            font-size: 20px;
-            margin-bottom: 2px;
-        }
-        .nav-item.active {
-            color: #6c5ce7;
-        }
+        .nav-item .icon { font-size: 22px; margin-bottom: 2px; transition: transform 0.2s ease; }
+        .nav-item.active { color: #ff7675; }
+        .nav-item.active .icon { transform: scale(1.15); }
 
-        /* Form Formatting */
-        .form-group {
-            margin-bottom: 14px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 700;
-            font-size: 11px;
-            color: #57606f;
-            text-transform: uppercase;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ced6e0;
-            border-radius: 14px;
-            outline: none;
-            font-size: 14px;
-            background-color: #f1f2f6;
-        }
-        input:focus {
-            border-color: #6c5ce7;
-            background-color: white;
-        }
-
-        .status-text { font-size: 12px; color: #57606f; line-height: 1.5; }
-        .badge { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; color: white; float: right; }
-        .bg-success { background-color: #2ed573; }
-        .bg-warning { background-color: #ffa502; }
+        .badge { padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; color: white; }
+        .bg-green { background-color: #2ed573; }
+        .bg-orange { background-color: #ff9f43; }
     </style>
 </head>
 <body>
 
     <div class="phone-wrapper">
         
-        <!-- TELEPHONY INTERFACE STATUS BAR -->
         <div class="status-bar">
-            <span id="live-clock">09:41</span>
-            <div class="status-icons">📶 🪫 100%</div>
+            <span id="live-time">09:41</span>
+            <div>📶 🔋 100%</div>
         </div>
 
-        <!-- NOTIFICATION BANNER POPUP -->
-        <div id="toast-banner" class="toast">Action logged successfully!</div>
+        <div id="toast-alert" class="toast">Action saved!</div>
         
-        <!-- VIRTUAL SYSTEM AUTH LAYER -->
         <div id="auth-screen" class="auth-screen">
-            <div style="text-align: center; color: white; font-size: 42px; margin-bottom: 10px;">🐾</div>
-            <div class="auth-title" id="auth-main-title">PetHealth Cloud</div>
-            
+            <div style="text-align: center; color: white; font-size: 45px; margin-bottom: 15px; animation: bounce 2s infinite;">🐾</div>
             <div class="auth-box">
                 <div class="auth-toggle">
-                    <button id="toggle-login" class="active" onclick="switchAuthMode('login')">Sign In</button>
-                    <button id="toggle-register" onclick="switchAuthMode('register')">Register</button>
+                    <button id="tab-login" class="active" onclick="toggleAuth('login')">Sign In</button>
+                    <button id="tab-register" onclick="toggleAuth('register')">Sign Up</button>
                 </div>
-                
                 <div class="form-group">
-                    <label>Account Email</label>
-                    <input type="email" id="auth-email" value="user@domain.com" placeholder="name@domain.com">
+                    <label>Email Account</label>
+                    <input type="email" id="user-email" value="petlover@email.com">
                 </div>
-                
                 <div class="form-group" style="margin-bottom: 20px;">
-                    <label>Password Structure</label>
-                    <input type="password" id="auth-password" value="123456" placeholder="••••••••">
+                    <label>Password</label>
+                    <input type="password" id="user-pass" value="123456">
                 </div>
-                
-                <button class="btn-action" id="btn-auth-submit" onclick="handleAuth()">Authorize Session</button>
+                <button class="btn-action" onclick="login()">Enter Application</button>
             </div>
         </div>
 
-        <!-- MAIN INTERACTIVE APP MENU HEADER -->
         <header>
-            <span id="app-title">Dashboard</span>
-            <button class="logout-top-btn" onclick="logout()">Disconnect</button>
+            <span id="header-title">Home</span>
+            <button class="logout-btn" onclick="logout()">Sign Out</button>
         </header>
 
-        <!-- APP CONTENT VIEWS HOLDER -->
         <div class="content-container">
             
-            <!-- VIEW TAB 1: DASHBOARD HUB -->
-            <div id="page-home" class="page active">
-                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Happy Dog Dashboard" class="health-img">
-                
+            <div id="view-home" class="page active">
                 <div class="card">
-                    <h2 id="welcome-msg">🐶 Profile: Max</h2>
-                    <p style="font-size: 12px; color: #747d8c;">All systems operational. Core parameters are currently cached locally on your hardware workspace.</p>
+                    <h2>⏰ Smart Reminders</h2>
+                    <div class="reminder-box">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">🍖</span>
+                            <div>
+                                <h4>Dinner Feeding Alert</h4>
+                                <p style="font-size: 11px; color: #747d8c;">Triggers at 07:00 PM</p>
+                            </div>
+                        </div>
+                        <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Dinner Alert')"><span class="slider"></span></label>
+                    </div>
+                    <div class="reminder-box" style="background: #e3fafc; border-left-color: #15aabf;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">🧼</span>
+                            <div>
+                                <h4>Grooming & Bath Day</h4>
+                                <p style="font-size: 11px; color: #747d8c;">Triggers on Sunday</p>
+                            </div>
+                        </div>
+                        <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Bath Alert')"><span class="slider"></span></label>
+                    </div>
                 </div>
 
-                <!-- Habits Trackers Matrix -->
                 <div class="card">
-                    <h2>📊 Today's Vitals Tracker</h2>
+                    <h2>📅 Daily Care Log</h2>
                     
-                    <div class="tracker-row">
-                        <div>
-                            <span style="font-size: 13px; font-weight: 700;">Hydration Log</span>
-                            <div style="font-size: 11px; color:#a4b0be;"><span id="water-val">250</span> / 600 mL</div>
+                    <div class="care-row">
+                        <div class="care-info">
+                            <h4>Food & Feeding</h4>
+                            <p>Give normal healthy dry food</p>
                         </div>
-                        <div class="counter-controls">
-                            <button class="btn-circle" onclick="updateTracker('water', -50)">-</button>
-                            <button class="btn-circle" onclick="updateTracker('water', 50)">+</button>
-                        </div>
+                        <button class="btn-log" onclick="addCareHistory('Gave dry food 🍖')">Log Food</button>
                     </div>
-                    <div class="progress-container"><div id="water-bar" class="progress-bar"></div></div>
 
-                    <div class="tracker-row" style="margin-top: 12px;">
-                        <div>
-                            <span style="font-size: 13px; font-weight: 700;">Nutrition Intake</span>
-                            <div style="font-size: 11px; color:#a4b0be;"><span id="food-val">120</span> / 250 g</div>
+                    <div class="care-row">
+                        <div class="care-info">
+                            <h4>Bath & Washing</h4>
+                            <p>Keep fur clean and shiny</p>
                         </div>
-                        <div class="counter-controls">
-                            <button class="btn-circle" onclick="updateTracker('food', -30)">-</button>
-                            <button class="btn-circle" onclick="updateTracker('food', 30)">+</button>
-                        </div>
+                        <button class="btn-log" onclick="addCareHistory('Gave warm bath 🧼')">Log Bath</button>
                     </div>
-                    <div class="progress-container"><div id="food-bar" class="progress-bar" style="background: linear-gradient(90deg, #ff7f50, #ff6b81);"></div></div>
+
+                    <div class="care-row">
+                        <div class="care-info">
+                            <h4>Nail Trimming</h4>
+                            <p>Check claws protection</p>
+                        </div>
+                        <button class="btn-log" onclick="addCareHistory('Trimmed nails ✂️')">Log Trim</button>
+                    </div>
+
+                    <div style="margin-top: 14px; font-weight: bold; font-size: 13px; color: #2d3436;">Today's Activity History:</div>
+                    <div class="history-list" id="care-history-box">
+                        </div>
                 </div>
             </div>
 
-            <!-- VIEW TAB 2: SCHEDULE SCHEDULES -->
-            <div id="page-schedule" class="page">
+            <div id="view-medical" class="page">
                 <div class="card">
-                    <h2>📅 Today's Clinical Schedule</h2>
-                    <p style="font-size: 12px; color: #747d8c; margin-bottom: 12px;">Automated cron jobs for medicine allocations and diet routines.</p>
-                    
-                    <div class="schedule-item">
-                        <div class="schedule-time">08:00 AM</div>
-                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Morning Heartworm Pill</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">12:30 PM</div>
-                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Post-Exercise Hydration Sweep</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">07:00 PM</div>
-                        <div style="font-size: 13px; font-weight: 600; color:#2d3436;">Insulin Check Calibration</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VIEW TAB 3: MEDICAL DIAGNOSTICS LABS -->
-            <div id="page-health" class="page">
-                <div class="filter-container">
-                    <button class="filter-pill active" id="flt-all" onclick="filterVaccines('all')">All</button>
-                    <button class="filter-pill" id="flt-comp" onclick="filterVaccines('completed')">Done</button>
-                    <button class="filter-pill" id="flt-up" onclick="filterVaccines('upcoming')">Pending</button>
-                </div>
-
-                <div class="card v-card" data-status="completed">
-                    <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=500&q=80" alt="Pet Vaccination" class="health-img">
-                    <h2>💉 Core DHPP Injection <span class="badge bg-success">Completed</span></h2>
-                    <p class="status-text">Immunization successfully administered by Dr. Sarah Jenkins at central laboratory clinic.</p>
-                </div>
-                
-                <div class="card v-card" data-status="upcoming">
-                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=500&q=80" alt="Veterinary Diagnostics" class="health-img">
-                    <h2>🩺 Annual Rabies Booster <span class="badge bg-warning">Upcoming</span></h2>
-                    <p class="status-text">Scheduled screening window opens in 12 days. Please confirm your smart calendar appointment.</p>
-                </div>
-
-                <div class="card">
-                    <h2>📡 Telemetry Diagnostic Scan</h2>
-                    <p class="status-text" style="margin-bottom: 12px;">Trigger automated telemetry sweep from your pet's paired smart device collar hardware.</p>
-                    <button class="btn-action" onclick="runAIScan()">Execute Telemetry Diagnostic</button>
-                </div>
-            </div>
-
-            <!-- VIEW TAB 4: CONFIGURATION PARAMETERS PROFILE -->
-            <div id="page-profile" class="page">
-                <div class="card" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Cat Profile" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
-                    <h3 id="profile-display-name">Max</h3>
-                    <p style="font-size: 12px; color:#a4b0be;">Ecosystem Verified Account</p>
-                </div>
-
-                <div class="card">
-                    <h2>📝 Update System Properties</h2>
+                    <h2>➕ Add New Health Log</h2>
                     <div class="form-group">
-                        <label>Pet Identification Name</label>
-                        <input type="text" id="input-pet-name" value="Max">
-                    </div>
-                    <div class="form-group">
-                        <label>Pet Species Formula</label>
-                        <select id="input-pet-type">
-                            <option value="🐶">Dog (Canine)</option>
-                            <option value="🐱">Cat (Feline)</option>
-                            <option value="🐹">Other Small Mammal</option>
+                        <label>Log Type</label>
+                        <select id="med-type">
+                            <option value="Diagnosis 🩺">General Diagnosis</option>
+                            <option value="Vaccine 💉">Vaccine Injection</option>
                         </select>
                     </div>
-                    <button class="btn-action" onclick="savePetProfile()">Sync Database Matrix</button>
+                    <div class="form-group">
+                        <label>Description Note</label>
+                        <input type="text" id="med-note" placeholder="e.g., Weight check normal, Rabies booster done">
+                    </div>
+                    <button class="btn-action" onclick="saveNewMedicalLog()">Save New Health Log</button>
+                </div>
+
+                <div class="card">
+                    <h2>📋 Active Health History</h2>
+                    <div id="medical-logs-container">
+                        </div>
+                </div>
+            </div>
+
+            <div id="view-photos" class="page">
+                <div class="card">
+                    <h2>📁 Photo Vault (X-Rays & Prescriptions)</h2>
+                    <p style="font-size: 13px; color: #747d8c; margin-bottom: 12px;">Simulate adding secure images of prescriptions or medical records.</p>
+                    
+                    <div class="form-group">
+                        <label>Document Label Title</label>
+                        <input type="text" id="photo-title" placeholder="e.g., Stomach X-Ray, Clinic Bill">
+                    </div>
+                    <button class="btn-action" onclick="simulatePhotoUpload()" style="background: #10ac84; box-shadow: 0 4px 12px rgba(16, 172, 132, 0.2);">Upload Simulated Photo</button>
+
+                    <div class="photo-grid" id="photos-display-grid">
+                        </div>
+                </div>
+            </div>
+
+            <div id="view-profile" class="page">
+                <div class="card" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" alt="Pet Avatar" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
+                    <h3 id="pet-display-name">Max</h3>
+                    <p style="font-size: 12px; color:#a4b0be;">Family Shared Profile</p>
+                </div>
+
+                <div class="card">
+                    <h2>📝 Pet Information</h2>
+                    <div class="form-group">
+                        <label>Pet Name</label>
+                        <input type="text" id="input-name" value="Max">
+                    </div>
+                    <div class="form-group">
+                        <label>Species</label>
+                        <select id="input-type">
+                            <option value="🐶">Dog</option>
+                            <option value="🐱">Cat</option>
+                        </select>
+                    </div>
+                    <button class="btn-action" onclick="saveProfile()">Apply Info Changes</button>
+                </div>
+
+                <div class="card" style="border: 2px dashed #ff7675; background: #fff5f5;">
+                    <h2>🔄 Cross-Device Synchronization</h2>
+                    <p style="font-size: 12px; color: #57606f; margin-bottom: 12px;">Keep data perfectly matching on your laptop, phone, and tablet screen spaces.</p>
+                    <button class="btn-action" style="background: #2ed573; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);" onclick="syncDevicesNow()">Force Sync Now</button>
                 </div>
             </div>
 
         </div>
 
-        <!-- BOTTOM ICON TAB SELECTION NAVIGATION CONTROLLERS -->
         <nav class="bottom-nav">
-            <button class="nav-item active" id="btn-nav-home" onclick="switchPage('home', 'Dashboard', this)">
+            <button class="nav-item active" id="nav-home" onclick="goPage('home', 'Home Hub', this)">
                 <span class="icon">🏠</span><span>Home</span>
             </button>
-            <button class="nav-item" id="btn-nav-schedule" onclick="switchPage('schedule', 'Schedules', this)">
-                <span class="icon">📅</span><span>Schedule</span>
+            <button class="nav-item" id="nav-medical" onclick="goPage('medical', 'Health Logs', this)">
+                <span class="icon">🩺</span><span>Medical</span>
             </button>
-            <button class="nav-item" id="btn-nav-health" onclick="switchPage('health', 'Medical Logs', this)">
-                <span class="icon">❤️</span><span>Health</span>
+            <button class="nav-item" id="nav-photos" onclick="goPage('photos', 'Records Vault', this)">
+                <span class="icon">📁</span><span>Photos</span>
             </button>
-            <button class="nav-item" id="btn-nav-profile" onclick="switchPage('profile', 'Account', this)">
+            <button class="nav-item" id="nav-profile" onclick="goPage('profile', 'Account', this)">
                 <span class="icon">👤</span><span>Profile</span>
             </button>
         </nav>
 
     </div>
 
-    <!-- PERSISTENT JAVASCRIPT STATE CONTROLLER WITH LOCALSTORAGE -->
     <script>
-        // State variables synced dynamically
-        let currentWater = parseInt(localStorage.getItem('pet_water')) || 250;
-        let currentFood = parseInt(localStorage.getItem('pet_food')) || 120;
-        let petName = localStorage.getItem('pet_name') || 'Max';
-        let petIcon = localStorage.getItem('pet_icon') || '🐶';
-        let authMode = 'login';
+        // Core persistent memory setup using storage arrays
+        let petName = localStorage.getItem('s_pname') || 'Max';
+        let petType = localStorage.getItem('s_ptype') || '🐶';
+        
+        let careHistory = JSON.parse(localStorage.getItem('s_care_history')) || [
+            { text: "Gave dry food 🍖", time: "08:15 AM" }
+        ];
+        
+        let medicalLogs = JSON.parse(localStorage.getItem('s_med_logs')) || [
+            { type: "Diagnosis 🩺", text: "Routine checkup: Clear teeth & normal heart weight", date: "Today" },
+            { type: "Vaccine 💉", text: "Rabies booster annual injection complete", date: "Last week" }
+        ];
 
-        // Initialize and setup dynamic text allocations on startup
+        let photoVault = JSON.parse(localStorage.getItem('s_photo_vault')) || [
+            { title: "Prescription_Note.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
+            { title: "Chest_Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
+        ];
+
         window.onload = function() {
-            updateUIFields();
+            renderAllData();
             
-            // Simulating a real system smart digital clock updating
+            // Continuous clock update
             setInterval(() => {
                 const now = new Date();
-                document.getElementById('live-clock').innerText = 
+                document.getElementById('live-time').innerText = 
                     String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             }, 1000);
 
-            // Bypass authentication screen layout matrix if already logged in previously
-            if (localStorage.getItem('is_auth') === 'true') {
+            // Session restore gate
+            if (localStorage.getItem('s_auth') === 'true') {
                 document.getElementById('auth-screen').classList.add('hidden');
             }
         };
 
-        function showToast(message) {
-            const banner = document.getElementById('toast-banner');
-            banner.innerText = message;
-            banner.classList.add('show');
-            setTimeout(() => banner.classList.remove('show'), 2500);
+        function showToast(text) {
+            const toast = document.getElementById('toast-alert');
+            toast.innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function switchAuthMode(mode) {
-            authMode = mode;
-            document.getElementById('toggle-login').classList.remove('active');
-            document.getElementById('toggle-register').classList.remove('active');
-            
-            if (mode === 'login') {
-                document.getElementById('toggle-login').classList.add('active');
-                document.getElementById('btn-auth-submit').innerText = 'Authorize Session';
-            } else {
-                document.getElementById('toggle-register').classList.add('active');
-                document.getElementById('btn-auth-submit').innerText = 'Instantiate Account Profile';
-            }
+        function toggleAuth(mode) {
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
+            document.getElementById('tab-' + mode).classList.add('active');
         }
 
-        function handleAuth() {
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value;
-
-            if (!email || !password) {
-                alert('Validation Failure: Missing required email or string parameters.');
-                return;
-            }
-
-            localStorage.setItem('is_auth', 'true');
+        function login() {
+            localStorage.setItem('s_auth', 'true');
             document.getElementById('auth-screen').classList.add('hidden');
-            showToast("Cloud synchronization successful!");
+            showToast("Welcome back to PetCare!");
         }
 
         function logout() {
-            localStorage.setItem('is_auth', 'false');
+            localStorage.setItem('s_auth', 'false');
             document.getElementById('auth-screen').classList.remove('hidden');
             showToast("Session disconnected.");
         }
 
-        function switchPage(pageId, titleText, clickElement) {
+        function goPage(pageId, title, navBtn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const selectedPage = document.getElementById('page-' + pageId);
-            if (selectedPage) selectedPage.classList.add('active');
-
-            document.getElementById('app-title').innerText = titleText;
+            document.getElementById('view-' + pageId).classList.add('active');
+            document.getElementById('header-title').innerText = title;
+            
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            clickElement.classList.add('active');
+            navBtn.classList.add('active');
         }
 
-        function updateTracker(type, amount) {
-            if (type === 'water') {
-                currentWater = Math.max(0, Math.min(600, currentWater + amount));
-                localStorage.setItem('pet_water', currentWater);
-            } else if (type === 'food') {
-                currentFood = Math.max(0, Math.min(250, currentFood + amount));
-                localStorage.setItem('pet_food', currentFood);
-            }
-            updateUIFields();
-            showToast(`Metrics mutated: updated ${type} intake profile.`);
+        function toggleReminder(title) {
+            showToast(`${title} modified!`);
         }
 
-        function updateUIFields() {
-            document.getElementById('water-val').innerText = currentWater;
-            document.getElementById('water-bar').style.width = (currentWater / 600 * 100) + '%';
+        // Feature 1: Dynamic Care Logging
+        function addCareHistory(actionText) {
+            const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            careHistory.unshift({ text: actionText, time: timeStr });
+            localStorage.setItem('s_care_history', JSON.stringify(careHistory));
+            renderCareHistory();
+            showToast("Activity logged locally!");
+        }
+
+        function renderCareHistory() {
+            const container = document.getElementById('care-history-box');
+            container.innerHTML = careHistory.map(item => `
+                <div class="history-item">
+                    <span>${item.text}</span>
+                    <span style="color: #b2bec3;">${item.time}</span>
+                </div>
+            `).join('');
+        }
+
+        // Feature 2: Expandable Medical Log Submissions
+        function saveNewMedicalLog() {
+            const type = document.getElementById('med-type').value;
+            const note = document.getElementById('med-note').value.trim();
+
+            if(!note) { alert("Please type a description note first!"); return; }
+
+            medicalLogs.unshift({ type: type, text: note, date: "Just now" });
+            localStorage.setItem('s_med_logs', JSON.stringify(medicalLogs));
             
-            document.getElementById('food-val').innerText = currentFood;
-            document.getElementById('food-bar').style.width = (currentFood / 250 * 100) + '%';
-
-            document.getElementById('welcome-msg').innerText = `${petIcon} Profile: ${petName}`;
-            document.getElementById('profile-display-name').innerText = petName;
-            document.getElementById('input-pet-name').value = petName;
-            document.getElementById('input-pet-type').value = petIcon;
+            document.getElementById('med-note').value = "";
+            renderMedicalLogs();
+            showToast("New health log added!");
         }
 
-        function filterVaccines(status) {
-            document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-            if(status === 'all') document.getElementById('flt-all').classList.add('active');
-            if(status === 'completed') document.getElementById('flt-comp').classList.add('active');
-            if(status === 'upcoming') document.getElementById('flt-up').classList.add('active');
-
-            document.querySelectorAll('.v-card').forEach(card => {
-                card.style.display = (status === 'all' || card.getAttribute('data-status') === status) ? 'block' : 'none';
-            });
+        function renderMedicalLogs() {
+            const container = document.getElementById('medical-logs-container');
+            container.innerHTML = medicalLogs.map(log => `
+                <div style="padding: 12px 0; border-bottom: 1px solid #f1f2f6;">
+                    <span class="badge ${log.type.includes('🩺') ? 'bg-orange' : 'bg-green'}" style="float: right;">${log.date}</span>
+                    <h4 style="font-size: 14px; color: #2d3436;">${log.type}</h4>
+                    <p style="font-size: 12px; color: #57606f; margin-top: 4px;">${log.text}</p>
+                </div>
+            `).join('');
         }
 
-        function savePetProfile() {
-            petName = document.getElementById('input-pet-name').value.trim() || 'Max';
-            petIcon = document.getElementById('input-pet-type').value;
+        // Feature 3: Photo Vault Simulation Uploads
+        function simulatePhotoUpload() {
+            const title = document.getElementById('photo-title').value.trim();
+            if(!title) { alert("Please input a title label for the document!"); return; }
+
+            // Using static high-quality placeholder for simulation upload view
+            const sampleImages = [
+                "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80",
+                "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80"
+            ];
+            const randomSrc = sampleImages[Math.floor(Math.random() * sampleImages.length)];
+
+            photoVault.unshift({ title: title + ".jpg", src: randomSrc });
+            localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
             
-            localStorage.setItem('pet_name', petName);
-            localStorage.setItem('pet_icon', petIcon);
-            
-            updateUIFields();
-            showToast("Properties synced to persistent matrix cache!");
+            document.getElementById('photo-title').value = "";
+            renderPhotoVault();
+            showToast("Document upload simulated!");
         }
 
-        function runAIScan() {
-            showToast("Initializing telemetry scanning diagnostics...");
+        function renderPhotoVault() {
+            const grid = document.getElementById('photos-display-grid');
+            grid.innerHTML = photoVault.map(photo => `
+                <div class="photo-item">
+                    <img src="${photo.src}" alt="Medical Record Image">
+                    <div class="photo-label">${photo.title}</div>
+                </div>
+            `).join('');
+        }
+
+        // Feature 4: Core Profile Sync
+        function saveProfile() {
+            petName = document.getElementById('input-name').value.trim() || 'Max';
+            petType = document.getElementById('input-type').value;
+            
+            localStorage.setItem('s_pname', petName);
+            localStorage.setItem('s_ptype', petType);
+            
+            renderProfileFields();
+            showToast("Profile applied!");
+        }
+
+        function renderProfileFields() {
+            document.getElementById('pet-display-name').innerText = petName;
+            document.getElementById('input-name').value = petName;
+            document.getElementById('input-type').value = petType;
+        }
+
+        // Feature 5: Multi-device Synchronization simulation
+        function syncDevicesNow() {
+            showToast("Contacting centralized servers...");
             setTimeout(() => {
-                alert("Pairing device constants over Bluetooth BLE...\n\nDiagnostic Analytics:\n• Heart Rate: 88 BPM (Healthy Range)\n• Hydration Index: Nominal\n• Activity Logs: Active");
-            }, 600);
+                showToast("All network nodes unified!");
+            }, 800);
+        }
+
+        function renderAllData() {
+            renderCareHistory();
+            renderMedicalLogs();
+            renderPhotoVault();
+            renderProfileFields();
         }
     </script>
 </body>
