@@ -3,23 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetCare - Minimal Pet Tracker</title>
+    <title>PetCare - Simple Universal Pet Diary</title>
     <style>
-        /* --- DESIGN SYSTEM (LIGHT & DARK VARIABLE) --- */
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
         :root {
-            --bg-body: #f8fafc;
+            --bg-body: #f1f5f9;
             --bg-phone: #ffffff;
             --border-phone: #0f172a;
             --text-main: #0f172a;
-            --text-muted: #64748b;
+            --text-muted: #475569;
             --text-sub: #94a3b8;
             --border-line: #e2e8f0;
             --card-bg: #ffffff;
+            --card-hover: #f8fafc;
             --btn-bg: #0f172a;
             --btn-text: #ffffff;
-            --btn-log-bg: #f1f5f9;
-            --bg-badge: #334155;
-            --reminder-bg: #f8fafc;
+            --btn-secondary: #f1f5f9;
+            --btn-secondary-text: #0f172a;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 24px;
         }
 
         [data-theme="dark"] {
@@ -27,42 +41,52 @@
             --bg-phone: #1e293b;
             --border-phone: #334155;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-muted: #cbd5e1;
             --text-sub: #64748b;
             --border-line: #334155;
             --card-bg: #1e293b;
+            --card-hover: #1e293b;
             --btn-bg: #f8fafc;
             --btn-text: #0f172a;
-            --btn-log-bg: #334155;
-            --bg-badge: #475569;
-            --reminder-bg: #111827;
+            --btn-secondary: #334155;
+            --btn-secondary-text: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-blue-light: #1e3a8a;
+            --success: #34d399;
+            --success-bg: #064e3b;
+            --danger: #f87171;
+            --danger-bg: #7f1d1d;
+            --warning: #fbbf24;
+            --warning-bg: #78350f;
         }
 
+        /* --- STYLES RESET --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
+
         body {
             background-color: var(--bg-body);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 10px;
-            transition: background 0.3s ease;
+            padding: 20px;
+            transition: background-color 0.3s ease;
         }
-        
-        /* Premium Phone Simulator */
+
+        /* --- PHONE CANVAS CONTAINER MOCKUP --- */
         .phone-wrapper {
-            width: 375px;
-            height: 780px;
+            width: 410px;
+            height: 860px;
             background: var(--bg-phone);
             border: 12px solid var(--border-phone);
-            border-radius: 40px;
-            box-shadow: 0 40px 80px rgba(15, 23, 42, 0.08), 0 10px 30px rgba(0, 0, 0, 0.04);
+            border-radius: 46px;
+            box-shadow: var(--shadow-lg);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -70,46 +94,94 @@
             transition: background 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Minimal Status Bar */
-        .status-bar {
-            height: 40px;
-            background: var(--bg-phone);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 24px 0 24px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: -0.2px;
-            z-index: 110;
-            transition: background 0.3s ease;
-        }
-
-        /* Elegant Toast Notification */
+        /* --- NOTIFICATION TOAST SYSTEM --- */
         .toast {
             position: absolute;
-            bottom: 100px;
+            bottom: 110px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 10px 20px;
-            border-radius: 12px;
+            transform: translateX(-50%) translateY(150px);
+            background: var(--text-main);
+            color: var(--bg-phone);
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
             font-size: 13px;
-            font-weight: 500;
-            z-index: 200;
+            font-weight: 600;
+            z-index: 500;
             opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             white-space: nowrap;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Minimal Auth Screen Overlay */
+        /* --- MODAL DIALOG POPUPS --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-card {
+            background: var(--bg-phone);
+            width: 100%;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-overlay.show .modal-card {
+            transform: scale(1);
+        }
+        .modal-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+        .modal-body {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .modal-body img {
+            width: 100%;
+            border-radius: var(--radius-md);
+            margin-top: 10px;
+            object-fit: cover;
+            max-height: 250px;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* --- ACCESS PROTECTION SCREEN (MINIMALIST RESTRUCTURED) --- */
         .auth-screen {
             position: absolute;
             top: 0;
@@ -117,52 +189,52 @@
             width: 100%;
             height: 100%;
             background: var(--bg-phone);
-            z-index: 150;
+            z-index: 400;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 32px;
+            justify-content: space-between;
+            padding: 60px 32px 40px 32px;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .auth-screen.hidden {
             transform: translateY(-100%);
         }
-        .auth-box {
-            width: 100%;
+        .auth-top {
+            margin-top: 20px;
         }
         .auth-title {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 36px;
+            font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
         }
         .auth-subtitle {
             font-size: 14px;
             color: var(--text-muted);
-            margin-bottom: 32px;
+            line-height: 1.6;
         }
-        .auth-toggle {
+        .auth-tabs {
             display: flex;
-            margin-bottom: 24px;
+            margin-top: 40px;
             border-bottom: 1px solid var(--border-line);
         }
-        .auth-toggle button {
+        .auth-tabs button {
             flex: 1;
-            padding: 12px;
+            padding: 14px 0;
             border: none;
             background: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
             color: var(--text-sub);
-            transition: all 0.2s ease;
             position: relative;
+            letter-spacing: 0.5px;
         }
-        .auth-toggle button.active {
+        .auth-tabs button.active {
             color: var(--text-main);
         }
-        .auth-toggle button.active::after {
+        .auth-tabs button.active::after {
             content: '';
             position: absolute;
             bottom: -1px;
@@ -171,33 +243,69 @@
             height: 2px;
             background: var(--text-main);
         }
+        .auth-form {
+            margin-top: 36px;
+        }
+        
+        /* Modern Minimalist Line Input Fields for Auth Area */
+        .auth-form .form-group {
+            margin-bottom: 28px;
+        }
+        .auth-form input {
+            border: none;
+            border-bottom: 1px solid var(--border-line);
+            border-radius: 0;
+            padding: 10px 0;
+            background-color: transparent;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+        .auth-form input:focus {
+            border-bottom-color: var(--text-main);
+        }
 
-        /* Clean Top Header */
+        /* --- GLOBAL APP HEADER --- */
         header {
             background-color: var(--bg-phone);
-            color: var(--text-main);
-            padding: 12px 24px;
-            font-size: 20px;
-            font-weight: 700;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            letter-spacing: -0.4px;
+            border-bottom: 1px solid var(--border-line);
+            z-index: 100;
+            margin-top: 10px; /* Slight margin adjustment after status bar removal */
         }
-        .logout-btn {
-            background: none;
+        header .title-area h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+        header .title-area p {
+            font-size: 13px;
             color: var(--text-muted);
-            border: 1px solid var(--border-line);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            margin-top: 2px;
         }
-        .logout-btn:hover { background: var(--btn-log-bg); color: var(--text-main); }
+        .profile-trigger {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--btn-secondary);
+            border: 2px solid var(--border-line);
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .profile-trigger img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        /* Main Scroll Container */
+        /* --- CONTAINER SCROLLABLE WORKSPACE --- */
         .content-container {
             flex: 1;
             overflow-y: auto;
@@ -205,110 +313,494 @@
             padding-bottom: 100px;
             background-color: var(--bg-phone);
         }
+        .content-container::-webkit-scrollbar {
+            display: none;
+        }
+        
         .page {
             display: none;
-            width: 100%;
         }
         .page.active {
             display: block;
-            animation: fadeIn 0.4s ease-out;
+            animation: viewFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
+        @keyframes viewFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modernized Minimal Cards */
-        .card {
-            background: var(--card-bg);
-            margin-bottom: 28px;
+        /* --- SEAMLESS HORIZONTAL PET SELECTOR --- */
+        .pet-scroller {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--border-line);
         }
-        .card h2 {
-            font-size: 13px;
+        .pet-scroller::-webkit-scrollbar {
+            display: none;
+        }
+        .pet-card-pill {
+            padding: 10px 18px;
+            border-radius: 24px;
+            border: 1px solid var(--border-line);
+            background: var(--bg-phone);
+            color: var(--text-muted);
+            font-size: 14px;
             font-weight: 600;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 16px;
+            cursor: pointer;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
         }
-
-        /* Solid Minimalist Interactive Buttons */
-        .btn-action {
-            width: 100%;
+        .pet-card-pill:hover {
+            border-color: var(--text-sub);
+        }
+        .pet-card-pill.active {
             background: var(--btn-bg);
             color: var(--btn-text);
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            border-color: var(--btn-bg);
+            box-shadow: var(--shadow-md);
         }
-        .btn-action:active {
-            transform: scale(0.98);
-        }
-        .btn-log {
-            background: var(--btn-log-bg);
-            color: var(--text-main);
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-        .btn-log:active { background: var(--border-line); }
-
-        /* Premium Toggle Switch */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 22px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--border-line);
-            transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
-            border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+        .pet-card-pill .avatar-mini {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+            background: #e2e8f0;
+            display: inline-block;
         }
-        input:checked + .slider { background-color: var(--text-main); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        .btn-add-pet-dash {
+            padding: 10px 16px;
+            border-radius: 24px;
+            border: 2px dashed var(--text-sub);
+            background: transparent;
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .btn-add-pet-dash:hover {
+            border-color: var(--text-main);
+            background: var(--btn-secondary);
+        }
 
-        /* Settings Option Row Layout */
-        .setting-row {
+        /* --- CONTENT CARDS --- */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-line);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .section-card h2 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- DASHBOARD VITAL STATUS METRICS --- */
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .vital-box {
+            background: var(--btn-secondary);
+            border: 1px solid var(--border-line);
+            border-radius: var(--radius-md);
+            padding: 14px 10px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .vital-box:hover {
+            transform: translateY(-2px);
+        }
+        .vital-box label-title {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        .vital-box value-data {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* --- ANALYTICS VECTOR SVG GRAPH --- */
+        .analytics-chart-container {
+            width: 100%;
+            height: 130px;
+            margin-top: 10px;
+            position: relative;
+        }
+        .svg-chart {
+            width: 100%;
+            height: 100%;
+        }
+        .chart-labels-x {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 6px 0 6px;
+            font-size: 10px;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        /* --- QUICK ACTION LOG ROWS --- */
+        .log-action-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 14px 0;
             border-bottom: 1px solid var(--border-line);
         }
-        .setting-row:last-child { border-bottom: none; }
-        .setting-label { font-size: 14px; font-weight: 500; color: var(--text-main); }
-        .setting-value { font-size: 14px; color: var(--text-muted); }
+        .log-action-row:last-child {
+            border-bottom: none;
+        }
+        .log-action-info {
+            flex: 1;
+            padding-right: 12px;
+        }
+        .log-action-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .log-action-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            line-height: 1.4;
+        }
 
-        /* Minimal Legal Link List */
-        .legal-link {
+        /* --- FEEDBACK HISTORY STREAMS --- */
+        .feed-stream {
+            margin-top: 14px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .feed-stream::-webkit-scrollbar {
+            display: none;
+        }
+        .stream-item {
+            padding: 12px;
+            background: var(--btn-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-main);
+            border-left: 3px solid var(--text-sub);
+        }
+        .stream-item .item-meta {
+            font-size: 11px;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+        .stream-item .btn-del-log {
+            color: var(--text-sub);
+            cursor: pointer;
+            font-weight: 700;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        .stream-item .btn-del-log:hover {
+            color: var(--danger);
+        }
+
+        /* --- INTERACTIVE REMINDERS & SCHEDULER --- */
+        .schedule-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: var(--btn-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            border: 1px solid var(--border-line);
+            transition: all 0.2s;
+        }
+        .schedule-box.disabled {
+            opacity: 0.5;
+        }
+        .schedule-box h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .schedule-box p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .btn-delete-reminder {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+        .btn-delete-reminder:hover {
+            color: var(--danger);
+        }
+
+        /* --- TOGGLE SWITCH ELEMENT --- */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-line);
+            transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #ffffff;
+            transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+        }
+        input:checked + .slider {
+            background-color: var(--text-main);
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* --- BUTTON CONTROLS --- */
+        .btn-block-prime {
+            width: 100%;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .btn-block-prime:active {
+            transform: scale(0.98);
+        }
+        .btn-pill-action {
+            background: var(--btn-secondary);
+            color: var(--btn-secondary-text);
+            border: 1px solid var(--border-line);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-pill-action:hover {
+            background: var(--border-line);
+        }
+
+        /* --- FORM ASSETS INPUT --- */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-line);
+            border-radius: var(--radius-sm);
+            outline: none;
+            font-size: 14px;
+            color: var(--text-main);
+            background-color: var(--bg-phone);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--text-main);
+        }
+        .split-row {
+            display: flex;
+            gap: 12px;
+        }
+        .split-row .form-group {
+            flex: 1;
+        }
+
+        /* --- LAB MEDICAL RECORDS TARGET --- */
+        .med-record-card {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-line);
+        }
+        .med-record-card:last-child {
+            border-bottom: none;
+        }
+        .med-record-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .badge-diag { background: var(--accent-blue-light); color: var(--accent-blue); }
+        .badge-vac { background: var(--success-bg); color: var(--success); }
+
+        /* --- IMAGE DOCUMENT GALLERY ARCHIVE --- */
+        .media-dropzone {
+            border: 2px dashed var(--border-line);
+            padding: 32px 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            background: var(--btn-secondary);
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .media-dropzone:hover {
+            background: var(--border-line);
+            border-color: var(--text-sub);
+        }
+        .media-dropzone .icon-cloud {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .media-dropzone p {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .gallery-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .gallery-item {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-line);
+            position: relative;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 115px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-meta {
+            font-size: 12px;
+            padding: 8px;
+            text-align: center;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+        }
+        .btn-trash-photo {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(15, 23, 42, 0.7);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .btn-trash-photo:hover {
+            background: #ef4444;
+        }
+
+        /* --- SETTINGS ROW PANEL CONTROLS --- */
+        .option-control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-line);
+        }
+        .option-control-row:last-child {
+            border-bottom: none;
+        }
+        .option-info-label {
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .option-info-val {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .link-navigation-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -318,614 +810,1393 @@
             color: var(--text-main);
             font-size: 14px;
             font-weight: 500;
+            transition: padding-left 0.2s;
         }
-        .legal-link:last-child { border-bottom: none; }
-        .legal-link span.arrow { color: var(--text-sub); font-size: 12px; }
-
-        /* Care Row Structure */
-        .care-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border-line);
+        .link-navigation-row:last-child {
+            border-bottom: none;
         }
-        .care-row:last-child { border-bottom: none; }
-        .care-info h4 { font-size: 14px; font-weight: 500; color: var(--text-main); }
-        .care-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .link-navigation-row:hover {
+            padding-left: 4px;
+            color: var(--accent-blue);
+        }
 
-        /* Activity History List */
-        .history-list {
-            margin-top: 12px;
+        /* --- SIMULATED STREAM TERMINAL BOX --- */
+        .terminal-stream-box {
+            background: #0f172a;
+            color: #38bdf8;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 11px;
+            padding: 14px;
+            border-radius: var(--radius-sm);
             max-height: 120px;
             overflow-y: auto;
-        }
-        .history-item {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-line);
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--text-main);
+            margin-top: 14px;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
 
-        /* Elegant Reminders Layout */
-        .reminder-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px;
-            background: var(--reminder-bg);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-line);
-            border-left: 3px solid var(--text-main);
-        }
-        .reminder-box h4 { font-size: 14px; font-weight: 500; color: var(--text-main); }
-
-        /* Form Controls */
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-line);
-            border-radius: 10px;
-            outline: none;
-            font-size: 14px;
-            color: var(--text-main);
-            background-color: var(--bg-phone);
-            transition: all 0.2s ease;
-        }
-        input:focus { border-color: var(--text-main); }
-
-        /* Premium Upload Box */
-        .upload-zone {
-            border: 2px dashed var(--border-line);
-            padding: 24px;
-            border-radius: 12px;
-            text-align: center;
-            background: var(--reminder-bg);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 18px;
-        }
-        .upload-zone:hover {
-            border-color: var(--text-main);
-        }
-        .upload-zone p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        .upload-zone .icon-up { font-size: 22px; color: var(--text-sub); }
-
-        /* Photo Grid System */
-        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 14px; }
-        .photo-item { border-radius: 12px; overflow: hidden; border: 1px solid var(--border-line); position: relative; }
-        .photo-item img { width: 100%; height: 115px; object-fit: cover; display: block; }
-        .photo-label { font-size: 11px; font-weight: 500; padding: 10px; text-align: center; background: var(--card-bg); color: var(--text-muted); border-top: 1px solid var(--border-line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        /* Delete Button on Images */
-        .btn-delete-photo {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            color: white;
-            border: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            font-size: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Premium Bottom Tab Navigation Menu */
-        nav.bottom-nav {
+        /* --- TAB NAV SYSTEM BOTTOM BAR --- */
+        nav.bottom-tab-bar {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 75px;
+            height: 84px;
             background-color: var(--bg-phone);
             border-top: 1px solid var(--border-line);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding-bottom: 16px;
-            z-index: 90;
-            transition: background 0.3s ease;
+            padding-bottom: 18px;
+            z-index: 300;
         }
-        .nav-item {
+        .tab-trigger-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--text-sub);
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: 600;
             background: none;
             border: none;
             width: 25%;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            transition: color 0.25s, transform 0.2s;
         }
-        .nav-item .icon { font-size: 18px; margin-bottom: 4px; transition: transform 0.2s ease; color: var(--text-sub); filter: grayscale(100%); opacity: 0.6; }
-        .nav-item.active { color: var(--text-main); }
-        .nav-item.active .icon { filter: none; opacity: 1; transform: translateY(-2px); }
-
-        .badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; color: #ffffff; }
-        .bg-dark { background-color: var(--bg-badge); }
+        .tab-trigger-item .tab-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+            opacity: 0.5;
+            transition: opacity 0.25s, transform 0.25s;
+        }
+        .tab-trigger-item:active {
+            transform: scale(0.95);
+        }
+        .tab-trigger-item.active {
+            color: var(--text-main);
+        }
+        .tab-trigger-item.active .tab-icon {
+            opacity: 1;
+            transform: scale(1.1) translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
-    <div class="phone-wrapper" id="phone-container">
-        
-        <div class="status-bar">
-            <span id="live-time">09:41</span>
-            <div>📶 100%</div>
-        </div>
+    <div class="phone-wrapper" id="phone-app-container">
 
-        <div id="toast-alert" class="toast">Saved</div>
+        <div id="toast-notification-system" class="toast">✓ Success</div>
+
+        <div id="global-app-modal" class="modal-overlay">
+            <div class="modal-card">
+                <div class="modal-header" id="modal-global-title">Notice</div>
+                <div class="modal-body" id="modal-global-body">Details template container.</div>
+                <div class="modal-footer">
+                    <button class="btn-pill-action" id="btn-modal-close" onclick="ModalWindowController.closeSystemModal()">Close</button>
+                </div>
+            </div>
+        </div>
         
-        <div id="auth-screen" class="auth-screen">
-            <div class="auth-box">
-                <div class="auth-title">PetCare</div>
-                <div class="auth-subtitle">Welcome back. Please enter your details.</div>
+        <div id="gateway-auth-canvas" class="auth-screen">
+            <div class="auth-top">
+                <div class="auth-title" id="auth-main-title-node">PetCare</div>
+                <div class="auth-subtitle" id="auth-sub-title-node">Simple digital diary to track your household pet vitals cleanly.</div>
                 
-                <div class="auth-toggle">
-                    <button id="tab-login" class="active" onclick="toggleAuth('login')">Sign In</button>
-                    <button id="tab-register" onclick="toggleAuth('register')">Sign Up</button>
+                <div class="auth-tabs">
+                    <button id="auth-tab-login-trigger" class="active" onclick="SessionEngine.toggleAuthViewMode('login')">Sign In</button>
+                    <button id="auth-tab-signup-trigger" onclick="SessionEngine.toggleAuthViewMode('signup')">Sign Up</button>
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="user-email" value="user@domain.com">
+
+                <div class="auth-form">
+                    <div class="form-group">
+                        <label id="lbl-auth-email-node">Account Email</label>
+                        <input type="email" id="auth-field-email" value="demo.student@university.edu">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 24px;">
+                        <label id="lbl-auth-pass-node">Security Password</label>
+                        <input type="password" id="auth-field-pass" value="••••••••••••">
+                    </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 32px;">
-                    <label>Password</label>
-                    <input type="password" id="user-pass" value="123456">
-                </div>
-                <button class="btn-action" id="btn-auth-submit" onclick="login()">Sign In</button>
+            </div>
+
+            <div class="auth-bottom">
+                <button class="btn-block-prime" id="btn-auth-submit-node" onclick="SessionEngine.executeAuthVerification()">Access Dashboard</button>
             </div>
         </div>
 
         <header>
-            <span id="header-title">Home</span>
-            <button class="logout-btn" onclick="logout()">Sign Out</button>
+            <div class="title-area">
+                <h1 id="app-header-title">Dashboard</h1>
+                <p id="app-header-subtitle">Daily pet overview statistics</p>
+            </div>
+            <div class="profile-trigger" id="btn-session-logout-trigger" onclick="SessionEngine.terminateActiveSession()" title="Logout">
+                🚪
+            </div>
         </header>
 
-        <div class="content-container">
+        <div class="content-container" id="scroll-workspace-canvas">
             
-            <div id="view-home" class="page active">
-                <div class="card">
-                    <h2>Reminders</h2>
-                    <div class="reminder-box">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 16px;">🍖</span>
-                            <div>
-                                <h4>Dinner Time</h4>
-                                <p style="font-size: 12px; color: var(--text-muted);">07:00 PM</p>
-                            </div>
-                        </div>
-                        <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Dinner Alert')"><span class="slider"></span></label>
-                    </div>
-                    <div class="reminder-box">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 16px;">🧼</span>
-                            <div>
-                                <h4>Bath Day</h4>
-                                <p style="font-size: 12px; color: var(--text-muted);">Sunday</p>
-                            </div>
-                        </div>
-                        <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Bath Alert')"><span class="slider"></span></label>
-                    </div>
-                </div>
+            <div class="pet-scroller" id="dynamic-pet-strip-container"></div>
 
-                <div class="card">
-                    <h2>Daily Care Log</h2>
-                    
-                    <div class="care-row">
-                        <div class="care-info">
-                            <h4>Feeding</h4>
-                            <p>Healthy pet dry food ration</p>
-                        </div>
-                        <button class="btn-log" onclick="addCareHistory('Fed the pet 🍖')">Log Food</button>
-                    </div>
-
-                    <div class="care-row">
-                        <div class="care-info">
-                            <h4>Bath & Washing</h4>
-                            <p>Standard warm shower clean</p>
-                        </div>
-                        <button class="btn-log" onclick="addCareHistory('Washed the pet 🧼')">Log Bath</button>
-                    </div>
-
-                    <div class="care-row">
-                        <div class="care-info">
-                            <h4>Nail Trimming</h4>
-                            <p>Check protection boundaries</p>
-                        </div>
-                        <button class="btn-log" onclick="addCareHistory('Trimmed nails ✂️')">Log Trim</button>
-                    </div>
-
-                    <div style="margin-top: 20px; font-weight: 600; font-size: 13px; color: var(--text-main); letter-spacing: -0.2px;">Today's Updates</div>
-                    <div class="history-list" id="care-history-box"></div>
-                </div>
-            </div>
-
-            <div id="view-medical" class="page">
-                <div class="card">
-                    <h2>New Record Entry</h2>
-                    <div class="form-group">
-                        <label>Entry Type</label>
-                        <select id="med-type">
-                            <option value="Diagnosis 🩺">Diagnosis</option>
-                            <option value="Vaccine 💉">Vaccine</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Physician Notes</label>
-                        <input type="text" id="med-note" placeholder="Enter status note...">
-                    </div>
-                    <button class="btn-action" onclick="saveNewMedicalLog()">Save Entry</button>
-                </div>
-
-                <div class="card">
-                    <h2>Medical Logs</h2>
-                    <div id="medical-logs-container"></div>
-                </div>
-            </div>
-
-            <div id="view-photos" class="page">
-                <div class="card">
-                    <h2>Document Gallery</h2>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">Store secure digital imagery of prescriptions, x-rays, or clinic checkups.</p>
-                    
-                    <div class="form-group">
-                        <label>Document Label</label>
-                        <input type="text" id="photo-title" placeholder="e.g., Blood Test Result">
-                    </div>
-
-                    <div class="upload-zone" onclick="triggerFileSelect()">
-                        <div class="icon-up">📥</div>
-                        <p><strong>Click to upload</strong> or drag file here</p>
-                        <p style="font-size: 11px; color: var(--text-sub);">PNG, JPG up to 2MB</p>
-                    </div>
-                    <input type="file" id="real-file-input" accept="image/*" style="display: none;" onchange="handleRealPhotoUpload(this)">
-
-                    <div class="photo-grid" id="photos-display-grid"></div>
-                </div>
-            </div>
-
-            <div id="view-profile" class="page">
+            <div id="page-view-home" class="page active">
                 
-                <div class="card" style="text-align: center; border-bottom: 1px solid var(--border-line); padding-bottom: 20px;">
-                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" alt="Avatar" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 1px solid var(--border-line);">
-                    <h3 id="pet-display-name" style="color: var(--text-main); font-size: 16px; font-weight: 600;">Max</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Active Parameter</p>
+                <div class="section-card">
+                    <h2 id="sec-title-vitals">Current Vitals Status</h2>
+                    <div class="vitals-grid">
+                        <div class="vital-box">
+                            <label-title id="lbl-vital-weight">Weight</label-title>
+                            <value-data id="node-val-weight">-- kg</value-data>
+                        </div>
+                        <div class="vital-box">
+                            <label-title id="lbl-vital-water">Water Intake</label-title>
+                            <value-data id="node-val-water">-- ml</value-data>
+                        </div>
+                        <div class="vital-box">
+                            <label-title id="lbl-vital-mood">Mood Status</label-title>
+                            <value-data id="node-val-mood">--</value-data>
+                        </div>
+                    </div>
+
+                    <div class="analytics-chart-container">
+                        <svg class="svg-chart" viewBox="0 0 340 120" id="svg-analytics-matrix-graph">
+                            </svg>
+                        <div class="chart-labels-x" id="chart-labels-x-strip">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" style="margin-top: 16px;">
-                    <h2>Pet Parameters</h2>
-                    <div class="form-group">
-                        <label>Name Identifier</label>
-                        <input type="text" id="input-name" value="Max">
+                <div class="section-card">
+                    <h2 id="sec-title-reminders">Active Daily Reminders</h2>
+                    
+                    <div id="dynamic-reminders-list-target"></div>
+
+                    <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border-line);">
+                        <div class="split-row">
+                            <div class="form-group" style="flex: 2; margin-bottom: 0;">
+                                <input type="text" id="input-new-reminder-text" placeholder="Add a new custom reminder note...">
+                            </div>
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <input type="text" id="input-new-reminder-time" placeholder="e.g. 08:00 PM">
+                            </div>
+                        </div>
+                        <button class="btn-block-prime" id="btn-add-reminder-node" onclick="DataController.appendNewCustomReminder()" style="margin-top: 10px; padding: 10px; font-size: 13px;">+ Create Reminder Task</button>
                     </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="sec-title-actions">Quick Daily Logs</h2>
+                    
+                    <div class="log-action-row">
+                        <div class="log-action-info">
+                            <h4 id="act-feed-t">Fed Meal</h4>
+                            <p id="act-feed-d">Logged a balanced organic meal portion</p>
+                        </div>
+                        <button class="btn-pill-action" id="btn-act-feed-node" onclick="DataController.dispatchInstantCareLog('feed')">Log</button>
+                    </div>
+
+                    <div class="log-action-row">
+                        <div class="log-action-info">
+                            <h4 id="act-bath-t">Groomed & Cleaned</h4>
+                            <p id="act-bath-d">Washed coat fur and cleaned ears completely</p>
+                        </div>
+                        <button class="btn-pill-action" id="btn-act-bath-node" onclick="DataController.dispatchInstantCareLog('bath')">Log</button>
+                    </div>
+
+                    <div class="log-action-row">
+                        <div class="log-action-info">
+                            <h4 id="act-trim-t">Paws Trimmed</h4>
+                            <p id="act-trim-d">Checked paws safety and trimmed claws clean</p>
+                        </div>
+                        <button class="btn-pill-action" id="btn-act-trim-node" onclick="DataController.dispatchInstantCareLog('trim')">Log</button>
+                    </div>
+
+                    <div style="margin-top: 24px; font-weight: 700; font-size: 12px; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;" id="lbl-history-header">Activity History Feed</div>
+                    <div class="feed-stream" id="target-care-history-stream"></div>
+                </div>
+            </div>
+
+            <div id="page-view-medical" class="page">
+                <div class="section-card">
+                    <h2 id="sec-title-addmed">Add Clinic Record Document</h2>
+                    
                     <div class="form-group">
-                        <label>Classification</label>
-                        <select id="input-type">
-                            <option value="🐶">Dog</option>
-                            <option value="🐱">Cat</option>
+                        <label id="lbl-med-type-node">Report Log Category</label>
+                        <select id="field-med-type">
+                            <option value="diag">General Consultation / Diagnosis 🩺</option>
+                            <option value="vac">Vaccine Immunization Booster 💉</option>
                         </select>
                     </div>
-                    <button class="btn-action" onclick="saveProfile()" style="padding: 10px;">Apply Fields</button>
+
+                    <div class="form-group">
+                        <label id="lbl-med-desc-node">Clinical Doctor Observations Note</label>
+                        <textarea id="field-med-note-text" rows="3" placeholder="Enter routine checkup parameters, medication info or medical notes..."></textarea>
+                    </div>
+
+                    <button class="btn-block-prime" id="btn-med-save-node" onclick="DataController.commitNewMedicalRecord()">Commit Document Entry</button>
                 </div>
 
-                <div class="card">
-                    <h2>Preferences</h2>
+                <div class="section-card">
+                    <h2 id="sec-title-medlist">Archived Clinical History Records</h2>
+                    <div id="target-medical-records-container"></div>
+                </div>
+            </div>
+
+            <div id="page-view-photos" class="page">
+                <div class="section-card">
+                    <h2 id="sec-title-gallery">Documents & Photos Album Vault</h2>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;" id="lbl-gallery-desc-node">Store receipts, lab prescription sheets, testing profiles and active memories to reference them cleanly anytime.</p>
                     
-                    <div class="setting-row">
-                        <div class="setting-label">Dark Mode</div>
+                    <div class="form-group">
+                        <label id="lbl-photo-title-node">File Document Short Title</label>
+                        <input type="text" id="field-photo-asset-title" placeholder="e.g. Lab Testing Paper Page 1">
+                    </div>
+
+                    <div class="media-dropzone" onclick="document.getElementById('hidden-system-file-input').click()">
+                        <span class="icon-cloud">📥</span>
+                        <p id="lbl-dropzone-p1">Click to select an image document from device</p>
+                        <p style="font-size: 11px; color: var(--text-sub); margin-top: 2px;" id="lbl-dropzone-p2">File ceiling limit standard size: 2MB</p>
+                    </div>
+                    <input type="file" id="hidden-system-file-input" accept="image/*" style="display: none;" onchange="DataController.processUploadedPhotoAsset(this)">
+
+                    <div class="gallery-photo-grid" id="target-photo-vault-grid"></div>
+                </div>
+            </div>
+
+            <div id="page-view-settings" class="page">
+                
+                <div class="section-card">
+                    <h2 id="sec-title-editprofile">Modify Selected Pet Data</h2>
+                    
+                    <div class="form-group">
+                        <label id="lbl-set-name">Pet Display Name</label>
+                        <input type="text" id="field-set-pet-name" value="">
+                    </div>
+
+                    <div class="split-row">
+                        <div class="form-group">
+                            <label id="lbl-set-species">Animal Species</label>
+                            <select id="field-set-pet-type">
+                                <option value="🐶">Dog (🐶)</option>
+                                <option value="🐱">Cat (🐱)</option>
+                                <option value="🐹">Hamster (🐹)</option>
+                                <option value="🐰">Rabbit (🐰)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-set-weight">Weight Target (kg)</label>
+                            <input type="number" step="0.1" id="field-set-pet-weight" value="0">
+                        </div>
+                    </div>
+
+                    <div class="split-row">
+                        <div class="form-group">
+                            <label id="lbl-set-water">Daily Water Intake (ml)</label>
+                            <input type="number" id="field-set-pet-water" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-set-mood">Active State Condition</label>
+                            <select id="field-set-pet-mood">
+                                <option value="Energetic 😊">Energetic 😊</option>
+                                <option value="Sleeping 😴">Sleeping 😴</option>
+                                <option value="Tired 😐">Tired 😐</option>
+                                <option value="Playful 🤪">Playful 🤪</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 8px;">
+                        <button class="btn-block-prime" id="btn-save-profile-node" onclick="DataController.updateActivePetCoreProfile()" style="flex: 2;">Save Core Changes</button>
+                        <button class="btn-pill-action" id="btn-delete-profile-node" onclick="DataController.purgeSelectedPetProfileNode()" style="background: var(--danger-bg); color: var(--danger); border-color: transparent; flex: 1;">Delete</button>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="sec-title-appcfg">App Core Preferences</h2>
+                    
+                    <div class="option-control-row">
+                        <div class="option-info-label" id="lbl-cfg-theme-node">Dark Visual Theme Mode</div>
                         <label class="switch">
-                            <input type="checkbox" id="theme-toggle" onclick="changeAppTheme()">
+                            <input type="checkbox" id="switch-theme-trigger-checkbox" onclick="SessionEngine.toggleThemeRuntimeConfig()">
                             <span class="slider"></span>
                         </label>
                     </div>
 
-                    <div class="setting-row">
-                        <div class="setting-label">Language</div>
-                        <div style="width: 120px;">
-                            <select id="lang-select" style="padding: 6px 10px; font-size: 13px;" onchange="changeLanguage()">
-                                <option value="en">English</option>
-                                <option value="zh">Chinese</option>
+                    <div class="option-control-row">
+                        <div class="option-info-label" id="lbl-cfg-lang-node">System Interface Language</div>
+                        <div style="width: 150px;">
+                            <select id="selector-language-engine" style="padding: 6px 10px; font-size: 13px;" onchange="SessionEngine.executeLanguageEngineSwitch(this.value)">
+                                <option value="en">English (U.S)</option>
+                                <option value="zh">繁體中文 (Traditional)</option>
                             </select>
                         </div>
                     </div>
+
+                <div class="section-card">
+                    <h2 id="sec-title-legal">Legal Terms Agreements</h2>
+                    <div class="link-navigation-row" onclick="SessionEngine.displayLegalModalDocument('privacy')">
+                        <span id="lbl-link-priv-node">Data Security & Privacy Regulation Policy</span>
+                        <span>➔</span>
+                    </div>
+                    <div class="link-navigation-row" onclick="SessionEngine.displayLegalModalDocument('terms')">
+                        <span id="lbl-link-terms-node">Application Service End-User Terms of Use</span>
+                        <span>➔</span>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h2>Contacts Support</h2>
-                    <div class="setting-row">
-                        <div class="setting-label" style="font-weight: 400;">Phone</div>
-                        <div class="setting-value" style="font-weight: 600;">0123456789</div>
+                <div class="section-card">
+                    <h2 id="sec-title-support">Customer Support Desk</h2>
+                    <div class="option-control-row">
+                        <div class="option-info-label" id="lbl-support-phone-node">Hotline</div>
+                        <div class="option-info-val">+1 (800) 555-0199</div>
                     </div>
-                    <div class="setting-row">
-                        <div class="setting-label" style="font-weight: 400;">Email</div>
-                        <div class="setting-value" style="font-size: 12px;">buiminhquan0110@gmail.com</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>Legal Boundaries</h2>
-                    <div class="legal-link" onclick="openLegalDoc('Privacy Policy', 'Your data is secured locally on this device using client-side localStorage structures. No external transmission vectors are utilized.')">
-                        <span>Privacy Policy</span>
-                        <span class="arrow">➔</span>
-                    </div>
-                    <div class="legal-link" onclick="openLegalDoc('Terms of Use', 'By operating this system terminal, you agree to execute operations inside sandboxed environmental storage boundaries symmetrically.')">
-                        <span>Terms of Use</span>
-                        <span class="arrow">➔</span>
+                    <div class="option-control-row">
+                        <div class="option-info-label" id="lbl-support-email-node">Email</div>
+                        <div class="option-info-val" style="font-size: 12px;">petycare@gmail.com</div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <nav class="bottom-nav">
-            <button class="nav-item active" id="nav-home" onclick="goPage('home', 'Home', this)">
-                <span class="icon">🏠</span><span>Home</span>
+        <nav class="bottom-tab-bar">
+            <button class="tab-trigger-item active" id="tab-nav-home" onclick="SessionEngine.switchActiveViewRoute('home', this)">
+                <span class="tab-icon">🏠</span><span id="nav-lbl-home">Home</span>
             </button>
-            <button class="nav-item" id="nav-medical" onclick="goPage('medical', 'Medical', this)">
-                <span class="icon">🩺</span><span>Medical</span>
+            <button class="tab-trigger-item" id="tab-nav-medical" onclick="SessionEngine.switchActiveViewRoute('medical', this)">
+                <span class="tab-icon">🩺</span><span id="nav-lbl-med">Medical</span>
             </button>
-            <button class="nav-item" id="nav-photos" onclick="goPage('photos', 'Photos', this)">
-                <span class="icon">📁</span><span>Photos</span>
+            <button class="tab-trigger-item" id="tab-nav-photos" onclick="SessionEngine.switchActiveViewRoute('photos', this)">
+                <span class="tab-icon">📁</span><span id="nav-lbl-photos">Gallery</span>
             </button>
-            <button class="nav-item" id="nav-profile" onclick="goPage('profile', 'Settings', this)">
-                <span class="icon">👤</span><span>Settings</span>
+            <button class="tab-trigger-item" id="tab-nav-settings" onclick="SessionEngine.switchActiveViewRoute('settings', this)">
+                <span class="tab-icon">⚙️</span><span id="nav-lbl-settings">Settings</span>
             </button>
         </nav>
 
     </div>
 
     <script>
-        let petName = localStorage.getItem('s_pname') || 'Max';
-        let petType = localStorage.getItem('s_ptype') || '🐶';
-        let authMode = 'login';
-        
-        let careHistory = JSON.parse(localStorage.getItem('s_care_history')) || [
-            { text: "Fed the pet 🍖", time: "08:15 AM" }
-        ];
-        
-        let medicalLogs = JSON.parse(localStorage.getItem('s_med_logs')) || [
-            { type: "Diagnosis 🩺", text: "Healthy weight, clean oral state", date: "Today" },
-            { type: "Vaccine 💉", text: "Core vaccine booster injected", date: "Last week" }
-        ];
-
-        let photoVault = JSON.parse(localStorage.getItem('s_photo_vault')) || [
-            { id: 1, title: "Prescription.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
-            { id: 2, title: "Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
-        ];
-
-        window.onload = function() {
-            // Apply theme on load
-            const savedTheme = localStorage.getItem('s_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            document.getElementById('theme-toggle').checked = (savedTheme === 'dark');
-
-            // Apply language selection on load
-            const savedLang = localStorage.getItem('s_lang') || 'en';
-            document.getElementById('lang-select').value = savedLang;
-
-            renderAllData();
-            
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('live-time').innerText = 
-                    String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-            }, 1000);
-
-            if (localStorage.getItem('s_auth') === 'true') {
-                document.getElementById('auth-screen').classList.add('hidden');
+        /**
+         * --- LOCALIZATION SYSTEM MATRIX ---
+         * Simple vocabulary explicitly targeted for general app consumers.
+         * Native Traditional Chinese translation pairs secured.
+         */
+        const DictionaryMatrix = {
+            en: {
+                appName: "PetCare",
+                appSubtitle: "Simple digital diary to track your household pet vitals cleanly.",
+                signIn: "Sign In",
+                signUp: "Sign Up",
+                emailLabel: "Account Email",
+                passwordLabel: "Security Password",
+                accessDashboard: "Access Dashboard",
+                createAccount: "Create New Account",
+                dashHeaderTitle: "Dashboard",
+                dashHeaderSubtitle: "Daily pet overview statistics",
+                medHeaderTitle: "Medical Book",
+                medHeaderSubtitle: "Clinic history and health documentation",
+                galHeaderTitle: "Gallery Vault",
+                galHeaderSubtitle: "Saved images and test receipts",
+                setHeaderTitle: "Settings",
+                setHeaderSubtitle: "Configure application configuration parameters",
+                secVitals: "Current Vitals Status",
+                secReminders: "Active Daily Reminders",
+                secActions: "Quick Daily Logs",
+                secAddMed: "Add Clinic Record Document",
+                secMedList: "Archived Clinical History Records",
+                secGallery: "Documents & Photos Album Vault",
+                secEditProfile: "Modify Selected Pet Data",
+                secAppCfg: "App Core Preferences",
+                secCloudSync: "Cloud Enterprise Secure Sync",
+                secLegal: "Legal Terms Agreements",
+                secSupport: "Customer Support Desk",
+                vitalWeight: "Weight",
+                vitalWater: "Water Intake",
+                vitalMood: "Mood Status",
+                historyHeader: "Activity History Feed",
+                medTypeLabel: "Report Log Category",
+                medDescLabel: "Clinical Doctor Observations Note",
+                medCommitBtn: "Commit Document Entry",
+                photoTitleLabel: "File Document Short Title",
+                dropzoneP1: "Click to select an image document from device",
+                dropzoneP2: "File ceiling limit standard size: 2MB",
+                galleryDesc: "Store receipts, lab prescription sheets, testing profiles and active memories to reference them cleanly anytime.",
+                setName: "Pet Display Name",
+                setSpecies: "Animal Species",
+                setWeight: "Weight Target (kg)",
+                setWater: "Daily Water Intake (ml)",
+                setMood: "Active State Condition",
+                saveProfileBtn: "Save Core Changes",
+                purgeProfileBtn: "Delete",
+                cfgTheme: "Dark Visual Theme Mode",
+                cfgLang: "System Interface Language",
+                syncDesc: "Sync local sandboxed arrays to cloud node servers cluster stream to prevent local browser cache eviction loss.",
+                syncBtn: "Initialize Full Database Backup Protocol",
+                linkPriv: "Data Security & Privacy Regulation Policy",
+                linkTerms: "Application Service End-User Terms of Use",
+                supportPhone: "Hotline",
+                supportEmail: "Contact Email",
+                navHome: "Home",
+                navMed: "Medical",
+                navPhotos: "Gallery",
+                navSettings: "Settings",
+                placeholderReminderText: "Add a new custom reminder note...",
+                placeholderReminderTime: "e.g. 08:00 PM",
+                btnCreateReminder: "+ Create Reminder Task",
+                noLogsYet: "No tracking entries saved for this profile today.",
+                noMedYet: "No verified medical documents saved yet.",
+                noPhotosYet: "No images compiled into this structural matrix.",
+                inputRequired: "Please input data completely inside required entry field.",
+                successLogin: "User authentication complete. Dashboard open.",
+                successLogout: "Session terminated cleanly.",
+                successSave: "Modifications updated successfully.",
+                successLogged: "Activity logged securely.",
+                successSync: "Cloud system sync operation completely done.",
+                modalClose: "Close",
+                dialogPrivacyTitle: "Data Security & Privacy Regulation Policy",
+                dialogPrivacyBody: "All individual pet profiles, tracking configurations, medical observation blocks, and uploaded local base64 imagery assets are stored entirely locally on your physical client sandbox cache (localStorage). We do not pipe raw personal telemetry profiles to monetization engines.",
+                dialogTermsTitle: "Application Service End-User Terms of Use",
+                dialogTermsBody: "This data layout interface runs directly within local browser runtime storage contexts. Processing a full device application memory wipe, hard privacy clear, or local domain storage reset will completely delete all active history items.",
+                actionMeal: "Fed a wholesome fresh meal 🍖",
+                actionBath: "Groomed fur coat and cleaned ears 🧼",
+                actionTrim: "Safely checked and trimmed claws clean ✂️",
+                actionMealTitle: "Fed Meal",
+                actionBathTitle: "Groomed & Cleaned",
+                actionTrimTitle: "Paws Trimmed",
+                defaultCat: "Cat (🐱)",
+                defaultDog: "Dog (🐶)",
+                defaultHamster: "Hamster (🐹)",
+                defaultRabbit: "Rabbit (🐰)",
+                moodEnergetic: "Energetic 😊",
+                moodSleeping: "Sleeping 😴",
+                moodTired: "Tired 😐",
+                moodPlayful: "Playful 🤪",
+                medCatDiag: "General Consultation / Diagnosis 🩺",
+                medCatVac: "Vaccine Immunization Booster 💉",
+                reminderFeedTitle: "Feed Daily Evening Food Intake",
+                reminderFeedSub: "Automated standard kibble dry portion dispenser - 07:00 PM",
+                reminderBathTitle: "Weekly Hygiene Washing Cycle",
+                reminderBathSub: "Hypoallergenic oil skin maintenance check - Sunday Routine",
+                newPetDefaultName: "New Pet Entry Profile",
+                toastAddPet: "New pet profile database tracker node instantiated.",
+                toastDelPet: "Pet profile entry purged cleanly.",
+                toastRemChange: "Task reminder validation state toggled.",
+                toastPhotoDel: "Image entry removed from asset vault.",
+                btnLogLabel: "Log",
+                btnAddPetLabel: "+ Create"
+            },
+            zh: {
+                appName: "PetCare 寵物日記",
+                appSubtitle: "簡單好用的數位寵物日記，輕鬆追蹤毛孩的健康數據與日常記錄。",
+                signIn: "登入系統",
+                signUp: "註冊帳號",
+                emailLabel: "帳號電子郵件",
+                passwordLabel: "安全密碼",
+                accessDashboard: "進入儀表板",
+                createAccount: "建立新帳號",
+                dashHeaderTitle: "主頁儀表板",
+                dashHeaderSubtitle: "寵物每日健康狀態概覽",
+                medHeaderTitle: "醫療筆記本",
+                medHeaderSubtitle: "門診病歷與健康檢查記錄檔案",
+                galHeaderTitle: "相簿與檔案庫",
+                galHeaderSubtitle: "保存的檢查單據、處方箋與生活照片",
+                setHeaderTitle: "系統設定",
+                setHeaderSubtitle: "配置與調整應用程式核心參數",
+                secVitals: "當前健康數據指數",
+                secReminders: "今日進行中定時提醒",
+                secActions: "每日核心速記行為",
+                secAddMed: "新增醫療看診檔案紀錄",
+                secMedList: "已歸檔的歷史門診病歷",
+                secGallery: "數位文件與相片保險箱",
+                secEditProfile: "修改選定寵物核心資料",
+                secAppCfg: "應用程式基礎偏好設定",
+                secCloudSync: "雲端伺服器安全同步備份",
+                secLegal: "法律合約條款與聲明",
+                secSupport: "客戶技術支援中心",
+                vitalWeight: "體重重量",
+                vitalWater: "今日飲水量",
+                vitalMood: "精神情緒狀態",
+                historyHeader: "今日動態日誌時間軸",
+                medTypeLabel: "看診病歷報告分類",
+                medDescLabel: "臨床獸醫師觀察診療敘述",
+                medCommitBtn: "確認儲存此病歷檔案",
+                photoTitleLabel: "文件相片簡短標題",
+                dropzoneP1: "點擊此處自裝置資料夾選取文件圖片上傳",
+                dropzoneP2: "單張圖片上傳上限大小：2MB",
+                galleryDesc: "妥善保存血檢報告、醫生處方箋、繳費收據 or 生活照，方便隨時隨地隨手翻閱查閱。",
+                setName: "寵物顯示名稱",
+                setSpecies: "寵物動物物種",
+                setWeight: "目標標準體重 (kg)",
+                setWater: "每日建議飲水目標 (ml)",
+                setMood: "當前即時行為表現狀態",
+                saveProfileBtn: "儲存核心設定變更",
+                purgeProfileBtn: "刪除此檔案",
+                cfgTheme: "深色模式視覺主題",
+                cfgLang: "使用者介面語系",
+                syncDesc: "將手機內儲存的本地沙盒矩陣資料即時同步至雲端伺服器，防止瀏覽器快取遭清除時資料丟失。",
+                syncBtn: "立即啟動完整雲端資料庫備份協定",
+                linkPriv: "資料安全與個人隱私保護政策細則",
+                linkTerms: "應用程式終端使用者服務服務條款",
+                supportPhone: "企業客戶技術服務專線",
+                supportEmail: "官方技術支援聯絡信箱",
+                navHome: "首頁主頁",
+                navMed: "醫療檢查",
+                navPhotos: "相簿文件",
+                navSettings: "設定中心",
+                placeholderReminderText: "輸入新的自訂提醒任務內容...",
+                placeholderReminderTime: "例如晚上 08:00 PM",
+                btnCreateReminder: "+ 建立自訂提醒任務",
+                noLogsYet: "此寵物今日尚無任何速記日誌紀錄。",
+                noMedYet: "目前尚無任何看診診療 or 疫苗注射病歷紀錄。",
+                noPhotosYet: "檔案庫中目前空空如也，尚未上傳任何圖片。",
+                inputRequired: "請完整填寫必填輸入欄位中的所有內容。",
+                successLogin: "使用者身分驗證成功，儀表板已解鎖。",
+                successLogout: "工作階段已安全登出。",
+                successSave: "核心參數變更已儲存成功。",
+                successLogged: "日常行為動態已成功寫入歷史紀錄。",
+                successSync: "雲端伺服器備份同步操作已安全圓滿完成。",
+                modalClose: "關閉視窗",
+                dialogPrivacyTitle: "資料安全與個人隱私保護政策細則",
+                dialogPrivacyBody: "本程式所涉及之所有寵物基本資料、日常行為日誌、醫療觀察敘述，以及使用者上傳之所有圖片文件（以Base64格式編碼儲存），皆完全保存在您個人手機瀏覽器的沙盒內部快取空間（localStorage）。本公司絕不擅自抓取 or 外洩您的私人隱私數據。",
+                dialogTermsTitle: "應用程式終端使用者服務服務條款",
+                dialogTermsBody: "本寵物管理程式之資料儲存運作架構完全依賴本地網頁快取機制。若您主動清除手機瀏覽器快取紀錄、重設應用程式資料，或是將裝置回復原廠設定，將導致所有歷史紀錄永久刪除且無法復原。",
+                actionMeal: "餵食了新鮮營養的點心乾糧 🍖",
+                actionBath: "完成了洗澡沙龍、修剪毛髮與耳朵清潔 🧼",
+                actionTrim: "安全地檢查並修剪指甲腳爪 ✂️",
+                actionMealTitle: "日常餵食",
+                actionBathTitle: "洗澡清潔",
+                actionTrimTitle: "修剪指甲",
+                defaultCat: "貓咪 (🐱)",
+                defaultDog: "狗狗 (🐶)",
+                defaultHamster: "倉鼠 (🐹)",
+                defaultRabbit: "兔子 (🐰)",
+                moodEnergetic: "活力充沛 😊",
+                moodSleeping: "正在熟睡 😴",
+                moodTired: "有些疲倦 😐",
+                moodPlayful: "調皮想玩 🤪",
+                medCatDiag: "一般門診診療 / 疾病診斷 🩺",
+                medCatVac: "年度疫苗核心免疫注射 💉",
+                reminderFeedTitle: "餵食每日晚間營養主食罐頭",
+                reminderFeedSub: "自動定量乾糧餵食器排程出糧 - 晚上 07:00 PM",
+                reminderBathTitle: "每週例行性洗澡與毛髮護理",
+                reminderBathSub: "低敏配方洗劑低刺激保養與耳朵深層檢查 - 每週日固定排程",
+                newPetDefaultName: "新註冊的寵物成員",
+                toastAddPet: "已成功建立全新寵物實體檔案追蹤矩陣。",
+                toastDelPet: "寵物成員檔案已完全安全抹除。",
+                toastRemChange: "定時提醒任務之啟用狀態已變更。",
+                toastPhotoDel: "圖片文件已成功自檔案保險箱中移除。",
+                btnLogLabel: "記錄",
+                btnAddPetLabel: "+ 新增"
             }
         };
 
-        function showToast(text) {
-            const toast = document.getElementById('toast-alert');
-            toast.innerText = text;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
+        /**
+         * --- GLOBAL STATE RUNTIME DIARY ---
+         */
+        let AppStateManager = {
+            currentLang: 'en',
+            currentTheme: 'light',
+            activePetId: null,
+            pets: []
+        };
 
-        /* --- THEME CONTROLLER --- */
-        function changeAppTheme() {
-            const isDark = document.getElementById('theme-toggle').checked;
-            const targetTheme = isDark ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', targetTheme);
-            localStorage.setItem('s_theme', targetTheme);
-            showToast(isDark ? "Dark View Engaged" : "Light View Engaged");
-        }
+        /**
+         * --- HARDWARE ENTERPRISE DEFAULT POPULATION SEED ---
+         */
+        const EnterpriseDefaultSeed = {
+            pets: [
+                { id: "p-alpha", name: "Max", type: "🐶", weight: 12.4, water: 500, mood_en: "Energetic 😊", mood_zh: "活力充沛 😊" },
+                { id: "p-beta", name: "Bella", type: "🐱", weight: 4.2, water: 220, mood_en: "Sleeping 😴", mood_zh: "正在熟睡 😴" }
+            ],
+            careHistory: {
+                "p-alpha": [{ id: 901, text_en: "Fed a wholesome fresh meal 🍖", text_zh: "餵食了新鮮營養 of 點心乾糧 🍖", time: "08:15 AM" }],
+                "p-beta": [{ id: 902, text_en: "Groomed fur coat and cleaned ears 🧼", text_zh: "完成了洗澡沙龍、修剪毛髮與耳朵清潔 🧼", time: "11:30 AM" }]
+            },
+            medicalLogs: {
+                "p-alpha": [
+                    { id: 801, type_en: "General Consultation / Diagnosis 🩺", type_zh: "一般門診診療 / 疾病診斷 🩺", note: "Strong bone structures, clear vision check, heartbeats regular.", date: "2026-06-10" }
+                ],
+                "p-beta": [
+                    { id: 802, type_en: "Vaccine Immunization Booster 💉", type_zh: "年度疫苗核心免疫注射 💉", note: "Annual respiratory defensive booster completed flawlessly.", date: "2026-05-24" }
+                ]
+            },
+            photoVault: {
+                "p-alpha": [
+                    { id: 701, title: "Routine Check Receipt Page", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=400&q=80" }
+                ],
+                "p-beta": [
+                    { id: 702, title: "Biochemistry Lab Analytics", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=400&q=80" }
+                ]
+            },
+            reminders: {
+                "p-alpha": [
+                    { id: 601, title_en: "Feed Daily Evening Food Intake", title_zh: "餵食每日晚間營養主食罐頭", sub_en: "Automated standard kibble dry portion dispenser - 07:00 PM", sub_zh: "自動定量乾糧餵食器排程出糧 - 晚上 07:00 PM", active: true, time: "07:00 PM" }
+                ],
+                "p-beta": [
+                    { id: 602, title_en: "Weekly Hygiene Washing Cycle", title_zh: "每週例行性洗澡與毛髮護理", sub_en: "Hypoallergenic oil skin maintenance check - Sunday Routine", sub_zh: "低敏配方洗劑低刺激保養與耳朵深層檢查 - 每週日固定排程", active: true, time: "09:00 AM" }
+                ]
+            }
+        };
 
-        /* --- LANGUAGE CONTROLLER --- */
-        function changeLanguage() {
-            const selectedLang = document.getElementById('lang-select').value;
-            localStorage.setItem('s_lang', selectedLang);
-            showToast(selectedLang === 'en' ? "Language: English" : "语言: 中文");
-        }
+        /**
+         * --- APP ARCHITECTURE ENGINE ---
+         */
+        const SessionEngine = (function() {
+            let selectedViewRoute = 'home';
+            let selectedAuthModeTab = 'login';
 
-        /* --- LEGAL VIEWER --- */
-        function openLegalDoc(title, text) {
-            alert(`--- ${title} ---\n\n${text}`);
-        }
+            function bootstrapCoreSystem() {
+                AppStateManager.currentLang = localStorage.getItem('p_lang_key') || 'en';
+                AppStateManager.currentTheme = localStorage.getItem('p_theme_key') || 'light';
+                
+                document.getElementById('selector-language-engine').value = AppStateManager.currentLang;
+                document.getElementById('switch-theme-trigger-checkbox').checked = (AppStateManager.currentTheme === 'dark');
+                document.documentElement.setAttribute('data-theme', AppStateManager.currentTheme);
 
-        function toggleAuth(mode) {
-            authMode = mode;
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('tab-register').classList.remove('active');
-            document.getElementById('tab-' + mode).classList.add('active');
-            
-            const submitBtn = document.getElementById('btn-auth-submit');
-            submitBtn.innerText = mode === 'login' ? "Sign In" : "Sign Up";
-        }
+                if(!localStorage.getItem('p_master_local_db')) {
+                    localStorage.setItem('p_master_local_db', JSON.stringify(EnterpriseDefaultSeed));
+                }
 
-        function login() {
-            localStorage.setItem('s_auth', 'true');
-            document.getElementById('auth-screen').classList.add('hidden');
-            showToast("Authenticated");
-        }
+                const dataPayload = JSON.parse(localStorage.getItem('p_master_local_db'));
+                AppStateManager.pets = dataPayload.pets;
 
-        function logout() {
-            localStorage.setItem('s_auth', 'false');
-            document.getElementById('auth-screen').classList.remove('hidden');
-            showToast("Disconnected");
-        }
+                if(AppStateManager.pets.length > 0) {
+                    AppStateManager.activePetId = localStorage.getItem('p_active_pet_pointer') || AppStateManager.pets[0].id;
+                    if(!AppStateManager.pets.find(p => p.id === AppStateManager.activePetId)) {
+                        AppStateManager.activePetId = AppStateManager.pets[0].id;
+                    }
+                }
 
-        function goPage(pageId, title, navBtn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('view-' + pageId).classList.add('active');
-            document.getElementById('header-title').innerText = title;
-            
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            navBtn.classList.add('active');
-        }
+                if (localStorage.getItem('p_auth_session_validated') === 'true') {
+                    document.getElementById('gateway-auth-canvas').classList.add('hidden');
+                }
 
-        function toggleReminder(title) {
-            showToast("Preferences saved");
-        }
-
-        function addCareHistory(actionText) {
-            const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            careHistory.unshift({ text: actionText, time: timeStr });
-            localStorage.setItem('s_care_history', JSON.stringify(careHistory));
-            renderCareHistory();
-            showToast("Logged");
-        }
-
-        function renderCareHistory() {
-            const container = document.getElementById('care-history-box');
-            if(!container) return;
-            container.innerHTML = careHistory.map(item => `
-                <div class="history-item">
-                    <span>${item.text}</span>
-                    <span style="color: var(--text-sub); font-size: 11px;">${item.time}</span>
-                </div>
-            `).join('');
-        }
-
-        function saveNewMedicalLog() {
-            const type = document.getElementById('med-type').value;
-            const note = document.getElementById('med-note').value.trim();
-
-            if(!note) { alert("Please type a note"); return; }
-
-            medicalLogs.unshift({ type: type, text: note, date: "Just now" });
-            localStorage.setItem('s_med_logs', JSON.stringify(medicalLogs));
-            
-            document.getElementById('med-note').value = "";
-            renderMedicalLogs();
-            showToast("Record appended");
-        }
-
-        function renderMedicalLogs() {
-            const container = document.getElementById('medical-logs-container');
-            if(!container) return;
-            container.innerHTML = medicalLogs.map(log => `
-                <div style="padding: 14px 0; border-bottom: 1px solid var(--border-line);">
-                    <span class="badge bg-dark" style="float: right;">${log.date}</span>
-                    <h4 style="font-size: 14px; font-weight: 500; color: var(--text-main);">${log.type}</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">${log.text}</p>
-                </div>
-            `).join('');
-        }
-
-        function triggerFileSelect() {
-            document.getElementById('real-file-input').click();
-        }
-
-        function handleRealPhotoUpload(input) {
-            const titleInput = document.getElementById('photo-title');
-            let title = titleInput.value.trim();
-            
-            if(!title) {
-                alert("Please input Document Label first before choosing a file.");
-                input.value = "";
-                return;
+                applyLanguageTranslationMatrix();
+                UI_Renderer.renderPetPillScrollerStrip();
+                UI_Renderer.refreshCurrentPetDashboardVitals();
             }
 
-            const file = input.files[0];
-            if (file) {
-                if(file.size > 2 * 1024 * 1024) {
-                    alert("Image too large. Please select a smaller photo (under 2MB).");
-                    input.value = "";
+            function applyLanguageTranslationMatrix() {
+                const lang = AppStateManager.currentLang;
+                const dict = DictionaryMatrix[lang];
+
+                // Auth Translation Blocks
+                document.getElementById('auth-main-title-node').innerText = dict.appName;
+                document.getElementById('auth-sub-title-node').innerText = dict.appSubtitle;
+                document.getElementById('auth-tab-login-trigger').innerText = dict.signIn;
+                document.getElementById('auth-tab-signup-trigger').innerText = dict.signUp;
+                document.getElementById('lbl-auth-email-node').innerText = dict.emailLabel;
+                document.getElementById('lbl-auth-pass-node').innerText = dict.passwordLabel;
+                document.getElementById('btn-auth-submit-node').innerText = (selectedAuthModeTab === 'login') ? dict.accessDashboard : dict.createAccount;
+
+                // Section Headers Text Arrays
+                document.getElementById('sec-title-vitals').innerText = dict.secVitals;
+                document.getElementById('sec-title-reminders').innerText = dict.secReminders;
+                document.getElementById('sec-title-actions').innerText = dict.secActions;
+                document.getElementById('sec-title-addmed').innerText = dict.secAddMed;
+                document.getElementById('sec-title-medlist').innerText = dict.secMedList;
+                document.getElementById('sec-title-gallery').innerText = dict.secGallery;
+                document.getElementById('sec-title-editprofile').innerText = dict.secEditProfile;
+                document.getElementById('sec-title-appcfg').innerText = dict.secAppCfg;
+                document.getElementById('sec-title-cloudsync').innerText = dict.secCloudSync;
+                document.getElementById('sec-title-legal').innerText = dict.secLegal;
+                document.getElementById('sec-title-support').innerText = dict.secSupport;
+
+                // Vitals Mini-Labels
+                document.getElementById('lbl-vital-weight').innerText = dict.vitalWeight;
+                document.getElementById('lbl-vital-water').innerText = dict.vitalWater;
+                document.getElementById('lbl-vital-mood').innerText = dict.vitalMood;
+                document.getElementById('lbl-history-header').innerText = dict.historyHeader;
+
+                // Forms & Placeholders
+                document.getElementById('lbl-med-type-node').innerText = dict.medTypeLabel;
+                document.getElementById('lbl-med-desc-node').innerText = dict.medDescLabel;
+                document.getElementById('btn-med-save-node').innerText = dict.medCommitBtn;
+                document.getElementById('lbl-photo-title-node').innerText = dict.photoTitleLabel;
+                document.getElementById('lbl-dropzone-p1').innerText = dict.dropzoneP1;
+                document.getElementById('lbl-dropzone-p2').innerText = dict.dropzoneP2;
+                document.getElementById('lbl-gallery-desc-node').innerText = dict.galleryDesc;
+
+                // Settings Setup Forms Labels
+                document.getElementById('lbl-set-name').innerText = dict.setName;
+                document.getElementById('lbl-set-species').innerText = dict.setSpecies;
+                document.getElementById('lbl-set-weight').innerText = dict.setWeight;
+                document.getElementById('lbl-set-water').innerText = dict.setWater;
+                document.getElementById('lbl-set-mood').innerText = dict.setMood;
+                document.getElementById('btn-save-profile-node').innerText = dict.saveProfileBtn;
+                document.getElementById('btn-delete-profile-node').innerText = dict.purgeProfileBtn;
+                document.getElementById('lbl-cfg-theme-node').innerText = dict.cfgTheme;
+                document.getElementById('lbl-cfg-lang-node').innerText = dict.cfgLang;
+                document.getElementById('lbl-sync-desc-node').innerText = dict.syncDesc;
+                document.getElementById('btn-trigger-sync-node').innerText = dict.syncBtn;
+                document.getElementById('lbl-link-priv-node').innerText = dict.linkPriv;
+                document.getElementById('lbl-link-terms-node').innerText = dict.linkTerms;
+                document.getElementById('lbl-support-phone-node').innerText = dict.supportPhone;
+                document.getElementById('lbl-support-email-node').innerText = dict.supportEmail;
+
+                // Navigation Items Strings
+                document.getElementById('nav-lbl-home').innerText = dict.navHome;
+                document.getElementById('nav-lbl-med').innerText = dict.navMed;
+                document.getElementById('nav-lbl-photos').innerText = dict.navPhotos;
+                document.getElementById('nav-lbl-settings').innerText = dict.navSettings;
+
+                // Input Field Multi-Placeholders Refit
+                document.getElementById('input-new-reminder-text').placeholder = dict.placeholderReminderText;
+                document.getElementById('input-new-reminder-time').placeholder = dict.placeholderReminderTime;
+                document.getElementById('btn-add-reminder-node').innerText = dict.btnCreateReminder;
+                document.getElementById('field-photo-asset-title').placeholder = dict.photoTitleLabel;
+
+                // Static Forms Select Localization
+                const typeSelect = document.getElementById('field-med-type');
+                typeSelect.options[0].text = dict.medCatDiag;
+                typeSelect.options[1].text = dict.medCatVac;
+
+                const specSelect = document.getElementById('field-set-pet-type');
+                specSelect.options[0].text = dict.defaultDog;
+                specSelect.options[1].text = dict.defaultCat;
+                specSelect.options[2].text = dict.defaultHamster;
+                specSelect.options[3].text = dict.defaultRabbit;
+
+                const moodSelect = document.getElementById('field-set-pet-mood');
+                moodSelect.options[0].text = dict.moodEnergetic;
+                moodSelect.options[1].text = dict.moodSleeping;
+                moodSelect.options[2].text = dict.moodTired;
+                moodSelect.options[3].text = dict.moodPlayful;
+
+                // Quick Log Actions Context Sync
+                document.getElementById('act-feed-t').innerText = dict.actionMealTitle;
+                document.getElementById('act-feed-d').innerText = dict.actionMeal;
+                document.getElementById('act-bath-t').innerText = dict.actionBathTitle;
+                document.getElementById('act-bath-d').innerText = dict.actionBath;
+                document.getElementById('act-trim-t').innerText = dict.actionTrimTitle;
+                document.getElementById('act-trim-d').innerText = dict.actionTrim;
+                
+                document.getElementById('btn-act-feed-node').innerText = dict.btnLogLabel;
+                document.getElementById('btn-act-bath-node').innerText = dict.btnLogLabel;
+                document.getElementById('btn-act-trim-node').innerText = dict.btnLogLabel;
+
+                triggerDynamicNavbarHeaderRecalculation();
+            }
+
+            function triggerDynamicNavbarHeaderRecalculation() {
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const headerTitle = document.getElementById('app-header-title');
+                const headerSubtitle = document.getElementById('app-header-subtitle');
+
+                if (selectedViewRoute === 'home') {
+                    headerTitle.innerText = dict.dashHeaderTitle;
+                    headerSubtitle.innerText = dict.dashHeaderSubtitle;
+                } else if (selectedViewRoute === 'medical') {
+                    headerTitle.innerText = dict.medHeaderTitle;
+                    headerSubtitle.innerText = dict.medHeaderSubtitle;
+                } else if (selectedViewRoute === 'photos') {
+                    headerTitle.innerText = dict.galHeaderTitle;
+                    headerSubtitle.innerText = dict.galHeaderSubtitle;
+                } else if (selectedViewRoute === 'settings') {
+                    headerTitle.innerText = dict.setHeaderTitle;
+                    headerSubtitle.innerText = dict.setHeaderSubtitle;
+                }
+            }
+
+            return {
+                initializeRuntimeSystem: function() { bootstrapCoreSystem(); },
+                switchActiveViewRoute: function(routeId, element) {
+                    selectedViewRoute = routeId;
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById('page-view-' + routeId).classList.add('active');
+                    
+                    document.querySelectorAll('.tab-trigger-item').forEach(item => item.classList.remove('active'));
+                    element.classList.add('active');
+                    
+                    triggerDynamicNavbarHeaderRecalculation();
+                    if(routeId === 'home') {
+                        UI_Renderer.injectVectorSvgMockAnalytics();
+                    }
+                },
+                toggleAuthViewMode: function(mode) {
+                    selectedAuthModeTab = mode;
+                    const dict = DictionaryMatrix[AppStateManager.currentLang];
+                    document.getElementById('auth-tab-login-trigger').classList.remove('active');
+                    document.getElementById('auth-tab-signup-trigger').classList.remove('active');
+                    document.getElementById('auth-tab-' + mode + '-trigger').classList.add('active');
+                    document.getElementById('btn-auth-submit-node').innerText = (mode === 'login') ? dict.accessDashboard : dict.createAccount;
+                },
+                executeAuthVerification: function() {
+                    localStorage.setItem('p_auth_session_validated', 'true');
+                    document.getElementById('gateway-auth-canvas').classList.add('hidden');
+                    this.dispatchFloatingToastAlert(DictionaryMatrix[AppStateManager.currentLang].successLogin);
+                },
+                terminateActiveSession: function() {
+                    localStorage.setItem('p_auth_session_validated', 'false');
+                    document.getElementById('gateway-auth-canvas').classList.remove('hidden');
+                    this.dispatchFloatingToastAlert(DictionaryMatrix[AppStateManager.currentLang].successLogout);
+                },
+                toggleThemeRuntimeConfig: function() {
+                    const checkState = document.getElementById('switch-theme-trigger-checkbox').checked;
+                    AppStateManager.currentTheme = checkState ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', AppStateManager.currentTheme);
+                    localStorage.setItem('p_theme_key', AppStateManager.currentTheme);
+                },
+                executeLanguageEngineSwitch: function(langCode) {
+                    AppStateManager.currentLang = langCode;
+                    localStorage.setItem('p_lang_key', langCode);
+                    applyLanguageTranslationMatrix();
+                    UI_Renderer.renderPetPillScrollerStrip();
+                    UI_Renderer.refreshCurrentPetDashboardVitals();
+                },
+                dispatchFloatingToastAlert: function(textMessage) {
+                    const toast = document.getElementById('toast-notification-system');
+                    toast.innerText = textMessage;
+                    toast.classList.add('show');
+                    clearTimeout(window.toastTimerToken);
+                    window.toastTimerToken = setTimeout(() => toast.classList.remove('show'), 2500);
+                },
+                displayLegalModalDocument: function(docKey) {
+                    const dict = DictionaryMatrix[AppStateManager.currentLang];
+                    if(docKey === 'privacy') {
+                        ModalWindowController.openSystemModal(dict.dialogPrivacyTitle, dict.dialogPrivacyBody);
+                    } else {
+                        ModalWindowController.openSystemModal(dict.dialogTermsTitle, dict.dialogTermsBody);
+                    }
+                },
+                triggerCloudSyncSimulationEngine: function() {
+                    const dict = DictionaryMatrix[AppStateManager.currentLang];
+                    const terminal = document.getElementById('terminal-sync-simulation-stream-output');
+                    terminal.style.display = 'block';
+                    terminal.innerHTML = "";
+                    
+                    const logs_en = [
+                        "Mapping physical localized client databases structure strings...",
+                        "Compressing memory byte profiles for target pet profile lists...",
+                        "Establishing secured handshake tunnel with remote backup node server...",
+                        "Streaming secure base64 image data fragments to primary cluster database...",
+                        "Cloud architecture data replication transaction successfully committed."
+                    ];
+
+                    const logs_zh = [
+                        "正在解析手機本地快取沙盒資料庫架構字串...",
+                        "正在壓縮打包現有寵物成員與健康指標數據封包...",
+                        "正在與遠端加密備份伺服器節點建立安全通道憑證...",
+                        "正在串流傳輸相簿保險箱內之編碼文件圖片碎片...",
+                        "同步完成！雲端資料庫備份事務已安全確認提交。"
+                    ];
+
+                    const selectedStream = (AppStateManager.currentLang === 'zh') ? logs_zh : logs_en;
+
+                    selectedStream.forEach((line, index) => {
+                        setTimeout(() => {
+                            const para = document.createElement('p');
+                            para.innerText = `>> ${line}`;
+                            terminal.appendChild(para);
+                            terminal.scrollTop = terminal.scrollHeight;
+                            if(index === selectedStream.length - 1) {
+                                SessionEngine.dispatchFloatingToastAlert(dict.successSync);
+                            }
+                        }, index * 450);
+                    });
+                }
+            };
+        })();
+
+        /**
+         * --- INTERFACE WORKSPACE GRAPHICS UI_RENDERER ---
+         */
+        const UI_Renderer = {
+            renderPetPillScrollerStrip: function() {
+                const container = document.getElementById('dynamic-pet-strip-container');
+                if(!container) return;
+
+                let matrixHTML = AppStateManager.pets.map(pet => {
+                    const isSelected = (pet.id === AppStateManager.activePetId) ? 'active' : '';
+                    return `
+                        <div class="pet-card-pill ${isSelected}" onclick="DataController.bindActivePetSwitch('${pet.id}')">
+                            <span>${pet.type}</span>
+                            <span>${pet.name}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                matrixHTML += `<button class="btn-add-pet-dash" onclick="DataController.instantiateNewPetProfileNode()">${dict.btnAnPetLabel || dict.btnAddPetLabel}</button>`;
+                container.innerHTML = matrixHTML;
+            },
+            refreshCurrentPetDashboardVitals: function() {
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                if(!AppStateManager.activePetId) {
+                    document.getElementById('node-val-weight').innerText = `-- kg`;
+                    document.getElementById('node-val-water').innerText = `-- ml`;
+                    document.getElementById('node-val-mood').innerText = `--`;
+                    document.getElementById('target-care-history-stream').innerHTML = `<p style="font-size:12px; color:var(--text-sub); padding:10px 0;">${dict.noLogsYet}</p>`;
+                    document.getElementById('target-medical-records-container').innerHTML = `<p style="font-size:12px; color:var(--text-sub); padding:10px 0;">${dict.noMedYet}</p>`;
+                    document.getElementById('target-photo-vault-grid').innerHTML = `<p style="font-size:12px; color:var(--text-sub); grid-column: span 2; padding:10px 0;">${dict.noPhotosYet}</p>`;
+                    document.getElementById('dynamic-reminders-list-target').innerHTML = "";
                     return;
                 }
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64ImageSrc = e.target.result;
-                    const newPhoto = { id: Date.now(), title: title + ".jpg", src: base64ImageSrc };
-                    photoVault.unshift(newPhoto);
-                    localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
-                    titleInput.value = "";
-                    input.value = "";
-                    renderPhotoVault();
-                    showToast("Document Stored");
+                const matchedPet = AppStateManager.pets.find(p => p.id === AppStateManager.activePetId);
+                if(matchedPet) {
+                    document.getElementById('node-val-weight').innerText = `${matchedPet.weight} kg`;
+                    document.getElementById('node-val-water').innerText = `${matchedPet.water} ml`;
+                    document.getElementById('node-val-mood').innerText = (AppStateManager.currentLang === 'zh' && matchedPet.mood_zh) ? matchedPet.mood_zh : matchedPet.mood_en;
+
+                    // Synchronize options form values
+                    document.getElementById('field-set-pet-name').value = matchedPet.name;
+                    document.getElementById('field-set-pet-type').value = matchedPet.type;
+                    document.getElementById('field-set-pet-weight').value = matchedPet.weight;
+                    document.getElementById('field-set-pet-water').value = matchedPet.water;
+                    document.getElementById('field-set-pet-mood').value = matchedPet.mood_en;
                 }
-                reader.readAsDataURL(file);
+
+                // Render Care Log Dynamic Stream
+                const historyStreamTarget = document.getElementById('target-care-history-stream');
+                const loadedLogs = db.careHistory[AppStateManager.activePetId] || [];
+                if(historyStreamTarget) {
+                    if(loadedLogs.length === 0) {
+                        historyStreamTarget.innerHTML = `<p style="font-size:12px; color:var(--text-sub); padding:4px 0;">${dict.noLogsYet}</p>`;
+                    } else {
+                        historyStreamTarget.innerHTML = loadedLogs.map(item => `
+                            <div class="stream-item">
+                                <span>${(AppStateManager.currentLang === 'zh') ? item.text_zh : item.text_en}</span>
+                                <div style="display:flex; align-items:center;">
+                                    <span class="item-meta">${item.time}</span>
+                                    <span class="btn-del-log" onclick="DataController.purgeSpecificCareLogLine(${item.id})">✕</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // Render Clinical Records Layout
+                const medicalContainerTarget = document.getElementById('target-medical-records-container');
+                const loadedMeds = db.medicalLogs[AppStateManager.activePetId] || [];
+                if(medicalContainerTarget) {
+                    if(loadedMeds.length === 0) {
+                        medicalContainerTarget.innerHTML = `<p style="font-size:12px; color:var(--text-sub); padding:4px 0;">${dict.noMedYet}</p>`;
+                    } else {
+                        medicalContainerTarget.innerHTML = loadedMeds.map(record => {
+                            const badgeClass = record.type_en.includes('Vaccine') ? 'badge-vac' : 'badge-diag';
+                            const badgeLabel = (AppStateManager.currentLang === 'zh') ? record.type_zh : record.type_en;
+                            return `
+                                <div class="med-record-card">
+                                    <span style="float:right; font-size:12px; color:var(--text-sub); font-weight:500;">${record.date}</span>
+                                    <div class="med-record-badge ${badgeClass}">${badgeLabel}</div>
+                                    <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-top:2px;">${record.note}</p>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+
+                // Render Photo Vault
+                const photoGridTarget = document.getElementById('target-photo-vault-grid');
+                const loadedPhotos = db.photoVault[AppStateManager.activePetId] || [];
+                if(photoGridTarget) {
+                    if(loadedPhotos.length === 0) {
+                        photoGridTarget.innerHTML = `<p style="font-size:12px; color:var(--text-sub); grid-column:span 2; padding:4px 0;">${dict.noPhotosYet}</p>`;
+                    } else {
+                        photoGridTarget.innerHTML = loadedPhotos.map(pic => `
+                            <div class="gallery-item" onclick="ModalWindowController.openImageLightboxPreview('${pic.title}', '${pic.src}')">
+                                <button class="btn-trash-photo" onclick="event.stopPropagation(); DataController.purgePhotoAssetItem(${pic.id})">✕</button>
+                                <img src="${pic.src}">
+                                <div class="gallery-meta">${pic.title}</div>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                this.renderActiveRemindersSystemBlocks();
+                this.injectVectorSvgMockAnalytics();
+            },
+            renderActiveRemindersSystemBlocks: function() {
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                const listContainer = document.getElementById('dynamic-reminders-list-target');
+                if(!listContainer) return;
+
+                const dataArray = db.reminders[AppStateManager.activePetId] || [];
+                if(dataArray.length === 0) {
+                    listContainer.innerHTML = "";
+                    return;
+                }
+
+                listContainer.innerHTML = dataArray.map(rem => {
+                    const isChecked = rem.active ? 'checked' : '';
+                    const disableClass = rem.active ? '' : 'disabled';
+                    const displayTitle = (AppStateManager.currentLang === 'zh') ? rem.title_zh : rem.title_en;
+                    const displaySub = (AppStateManager.currentLang === 'zh') ? rem.sub_zh : rem.sub_en;
+                    return `
+                        <div class="schedule-box ${disableClass}">
+                            <div>
+                                <h4>${displayTitle}</h4>
+                                <p>${displaySub}</p>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <label class="switch">
+                                    <input type="checkbox" ${isChecked} onclick="DataController.toggleReminderActiveStateNode(${rem.id})">
+                                    <span class="slider"></span>
+                                </label>
+                                <button class="btn-delete-reminder" onclick="DataController.deleteReminderTaskItem(${rem.id})">✕</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+            injectVectorSvgMockAnalytics: function() {
+                const svg = document.getElementById('svg-analytics-matrix-graph');
+                if(!svg) return;
+
+                let activePetWeightFactor = 12.4;
+                if(AppStateManager.activePetId) {
+                    const matchedPet = AppStateManager.pets.find(p => p.id === AppStateManager.activePetId);
+                    if(matchedPet) activePetWeightFactor = matchedPet.weight;
+                }
+
+                const baseLevel = 90 - (activePetWeightFactor * 2.5);
+                const p1 = baseLevel + 10;
+                const p2 = baseLevel - 5;
+                const p3 = baseLevel + 15;
+                const p4 = baseLevel;
+                const p5 = baseLevel - 12;
+                const p6 = baseLevel + 8;
+                const p7 = baseLevel;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="chartGlowGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="var(--text-main)" stop-opacity="0.15" />
+                            <stop offset="100%" stop-color="var(--text-main)" stop-opacity="0.0" />
+                        </linearGradient>
+                    </defs>
+                    <line x1="0" y1="30" x2="340" y2="30" stroke="var(--border-line)" stroke-width="1" stroke-dasharray="4,4" />
+                    <line x1="0" y1="70" x2="340" y2="70" stroke="var(--border-line)" stroke-width="1" stroke-dasharray="4,4" />
+                    
+                    <polygon points="10,${p1} 60,${p2} 110,${p3} 160,${p4} 210,${p5} 260,${p6} 320,${p7} 320,110 10,110" fill="url(#chartGlowGrad)" />
+                    
+                    <path d="M10,${p1} L60,${p2} L110,${p3} L160,${p4} L210,${p5} L260,${p6} L320,${p7}" fill="none" stroke="var(--text-main)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    
+                    <circle cx="10" cy="${p1}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="60" cy="${p2}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="110" cy="${p3}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="160" cy="${p4}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="210" cy="${p5}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="260" cy="${p6}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                    <circle cx="320" cy="${p7}" r="4" fill="var(--bg-phone)" stroke="var(--text-main)" stroke-width="2" />
+                `;
             }
-        }
+        };
 
-        function deletePhoto(id) {
-            photoVault = photoVault.filter(photo => photo.id !== id);
-            localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
-            renderPhotoVault();
-            showToast("Document Removed");
-        }
+        /**
+         * --- DATA TRANSACTIONS MANAGER CONTROLLER ---
+         */
+        const DataController = {
+            bindActivePetSwitch: function(id) {
+                AppStateManager.activePetId = id;
+                localStorage.setItem('p_active_pet_pointer', id);
+                UI_Renderer.renderPetPillScrollerStrip();
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+            },
+            instantiateNewPetProfileNode: function() {
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                const generatedId = "p_node_" + Date.now();
+                
+                const fallbackNewPetStructure = {
+                    id: generatedId,
+                    name: dict.newPetDefaultName,
+                    type: "🐶",
+                    weight: 5.0,
+                    water: 300,
+                    mood_en: "Energetic 😊",
+                    mood_zh: "活力充沛 😊"
+                };
 
-        function renderPhotoVault() {
-            const grid = document.getElementById('photos-display-grid');
-            if(!grid) return;
-            grid.innerHTML = photoVault.map(photo => `
-                <div class="photo-item">
-                    <button class="btn-delete-photo" onclick="deletePhoto(${photo.id})">✕</button>
-                    <img src="${photo.src}">
-                    <div class="photo-label">${photo.title}</div>
-                </div>
-            `).join('');
-        }
+                db.pets.push(fallbackNewPetStructure);
+                db.careHistory[generatedId] = [];
+                db.medicalLogs[generatedId] = [];
+                db.photoVault[generatedId] = [];
+                db.reminders[generatedId] = [
+                    { id: Date.now() + 1, title_en: "Feed Daily Evening Food Intake", title_zh: "餵食每日晚間營養主食罐頭", sub_en: "Automated standard kibble dry portion dispenser - 07:00 PM", sub_zh: "自動定量乾糧餵食器排程出糧 - 晚上 07:00 PM", active: true, time: "07:00 PM" }
+                ];
 
-        function saveProfile() {
-            petName = document.getElementById('input-name').value.trim() || 'Max';
-            petType = document.getElementById('input-type').value;
-            localStorage.setItem('s_pname', petName);
-            localStorage.setItem('s_ptype', petType);
-            renderProfileFields();
-            showToast("Fields updated");
-        }
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                AppStateManager.pets = db.pets;
+                
+                this.bindActivePetSwitch(generatedId);
+                SessionEngine.dispatchFloatingToastAlert(dict.toastAddPet);
+            },
+            updateActivePetCoreProfile: function() {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                const targetNameText = document.getElementById('field-set-pet-name').value.trim();
+                if(!targetNameText) {
+                    alert(dict.inputRequired);
+                    return;
+                }
 
-        function renderProfileFields() {
-            const nameDisp = document.getElementById('pet-display-name');
-            if(nameDisp) nameDisp.innerText = petName;
-            
-            const inpName = document.getElementById('input-name');
-            if(inpName) inpName.value = petName;
-            
-            const inpType = document.getElementById('input-type');
-            if(inpType) inpType.value = petType;
-        }
+                const targetIndex = db.pets.findIndex(p => p.id === AppStateManager.activePetId);
+                if(targetIndex !== -1) {
+                    db.pets[targetIndex].name = targetNameText;
+                    db.pets[targetIndex].type = document.getElementById('field-set-pet-type').value;
+                    db.pets[targetIndex].weight = parseFloat(document.getElementById('field-set-pet-weight').value) || 0;
+                    db.pets[targetIndex].water = parseInt(document.getElementById('field-set-pet-water').value) || 0;
+                    
+                    const moodSelectValue = document.getElementById('field-set-pet-mood').value;
+                    db.pets[targetIndex].mood_en = moodSelectValue;
+                    
+                    if(moodSelectValue.includes('Energetic')) db.pets[targetIndex].mood_zh = "活力充沛 😊";
+                    else if(moodSelectValue.includes('Sleeping')) db.pets[targetIndex].mood_zh = "正在熟睡 😴";
+                    else if(moodSelectValue.includes('Tired')) db.pets[targetIndex].mood_zh = "有些疲倦 😐";
+                    else if(moodSelectValue.includes('Playful')) db.pets[targetIndex].mood_zh = "調皮想玩 🤪";
 
-        function renderAllData() {
-            renderCareHistory();
-            renderMedicalLogs();
-            renderPhotoVault();
-            renderProfileFields();
-        }
+                    localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                    AppStateManager.pets = db.pets;
+                    
+                    UI_Renderer.renderPetPillScrollerStrip();
+                    UI_Renderer.refreshCurrentPetDashboardVitals();
+                    SessionEngine.dispatchFloatingToastAlert(dict.successSave);
+                }
+            },
+            purgeSelectedPetProfileNode: function() {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                let db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                db.pets = db.pets.filter(p => p.id !== AppStateManager.activePetId);
+                delete db.careHistory[AppStateManager.activePetId];
+                delete db.medicalLogs[AppStateManager.activePetId];
+                delete db.photoVault[AppStateManager.activePetId];
+                delete db.reminders[AppStateManager.activePetId];
+
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                AppStateManager.pets = db.pets;
+
+                if(AppStateManager.pets.length > 0) {
+                    AppStateManager.activePetId = AppStateManager.pets[0].id;
+                } else {
+                    AppStateManager.activePetId = null;
+                }
+                
+                UI_Renderer.renderPetPillScrollerStrip();
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+                SessionEngine.dispatchFloatingToastAlert(dict.toastDelPet);
+            },
+            dispatchInstantCareLog: function(logTypeCode) {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                let text_en = "";
+                let text_zh = "";
+                
+                if(logTypeCode === 'feed') {
+                    text_en = DictionaryMatrix['en'].actionMeal;
+                    text_zh = DictionaryMatrix['zh'].actionMeal;
+                } else if(logTypeCode === 'bath') {
+                    text_en = DictionaryMatrix['en'].actionBath;
+                    text_zh = DictionaryMatrix['zh'].actionBath;
+                } else if(logTypeCode === 'trim') {
+                    text_en = DictionaryMatrix['en'].actionTrim;
+                    text_zh = DictionaryMatrix['zh'].actionTrim;
+                }
+
+                const currentTimestampStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const payloadInstance = {
+                    id: Date.now(),
+                    text_en: text_en,
+                    text_zh: text_zh,
+                    time: currentTimestampStr
+                };
+
+                if(!db.careHistory[AppStateManager.activePetId]) db.careHistory[AppStateManager.activePetId] = [];
+                db.careHistory[AppStateManager.activePetId].unshift(payloadInstance);
+                
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+                SessionEngine.dispatchFloatingToastAlert(dict.successLogged);
+            },
+            purgeSpecificCareLogLine: function(itemId) {
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                db.careHistory[AppStateManager.activePetId] = db.careHistory[AppStateManager.activePetId].filter(i => i.id !== itemId);
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+            },
+            appendNewCustomReminder: function() {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                const taskInputText = document.getElementById('input-new-reminder-text').value.trim();
+                const taskInputTime = document.getElementById('input-new-reminder-time').value.trim();
+                
+                if(!taskInputText || !taskInputTime) {
+                    alert(dict.inputRequired);
+                    return;
+                }
+
+                const formatSub_en = `Custom reminder alert - ${taskInputTime}`;
+                const formatSub_zh = `自訂定時排程提醒 - ${taskInputTime}`;
+
+                const freshReminderObj = {
+                    id: Date.now(),
+                    title_en: taskInputText,
+                    title_zh: taskInputText,
+                    sub_en: formatSub_en,
+                    sub_zh: formatSub_zh,
+                    active: true,
+                    time: taskInputTime
+                };
+
+                if(!db.reminders[AppStateManager.activePetId]) db.reminders[AppStateManager.activePetId] = [];
+                db.reminders[AppStateManager.activePetId].push(freshReminderObj);
+                
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                document.getElementById('input-new-reminder-text').value = "";
+                document.getElementById('input-new-reminder-time').value = "";
+                
+                UI_Renderer.renderActiveRemindersSystemBlocks();
+                SessionEngine.dispatchFloatingToastAlert(dict.successSave);
+            },
+            toggleReminderActiveStateNode: function(remId) {
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                const pool = db.reminders[AppStateManager.activePetId] || [];
+                const idx = pool.findIndex(r => r.id === remId);
+                
+                if(idx !== -1) {
+                    pool[idx].active = !pool[idx].active;
+                    localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                    UI_Renderer.renderActiveRemindersSystemBlocks();
+                    SessionEngine.dispatchFloatingToastAlert(DictionaryMatrix[AppStateManager.currentLang].toastRemChange);
+                }
+            },
+            deleteReminderTaskItem: function(remId) {
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                db.reminders[AppStateManager.activePetId] = db.reminders[AppStateManager.activePetId].filter(r => r.id !== remId);
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                UI_Renderer.renderActiveRemindersSystemBlocks();
+            },
+            commitNewMedicalRecord: function() {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                
+                const noteInputBox = document.getElementById('field-med-note-text');
+                const embeddedNoteText = noteInputBox.value.trim();
+                if(!embeddedNoteText) {
+                    alert(dict.inputRequired);
+                    return;
+                }
+
+                const catSelect = document.getElementById('field-med-type');
+                const activeCatValue = catSelect.value;
+                
+                let type_en = "General Consultation 🩺";
+                let type_zh = "一般門診診療 🩺";
+                if(activeCatValue === 'vac') {
+                    type_en = "Vaccine Immunization Booster 💉";
+                    type_zh = "年度疫苗核心免疫注射 💉";
+                }
+
+                const stampDate = new Date();
+                const processedDateString = stampDate.getFullYear() + "-" + String(stampDate.getMonth() + 1).padStart(2, '0') + "-" + String(stampDate.getDate()).padStart(2, '0');
+
+                const recordBlockInstance = {
+                    id: Date.now(),
+                    type_en: type_en,
+                    type_zh: type_zh,
+                    note: embeddedNoteText,
+                    date: processedDateString
+                };
+
+                if(!db.medicalLogs[AppStateManager.activePetId]) db.medicalLogs[AppStateManager.activePetId] = [];
+                db.medicalLogs[AppStateManager.activePetId].unshift(recordBlockInstance);
+                
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                noteInputBox.value = "";
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+                SessionEngine.dispatchFloatingToastAlert(dict.successSave);
+            },
+            processUploadedPhotoAsset: function(fileInputNode) {
+                if(!AppStateManager.activePetId) return;
+                const dict = DictionaryMatrix[AppStateManager.currentLang];
+                const titleNode = document.getElementById('field-photo-asset-title');
+                let inputLiteralTitle = titleNode.value.trim();
+
+                if(!inputLiteralTitle) {
+                    alert(dict.inputRequired);
+                    fileInputNode.value = "";
+                    return;
+                }
+
+                const file = fileInputNode.files[0];
+                if(file) {
+                    if(file.size > 2 * 1024 * 1024) {
+                        alert(dict.dropzoneP2);
+                        fileInputNode.value = "";
+                        return;
+                    }
+
+                    const fileReaderInstance = new FileReader();
+                    fileReaderInstance.onload = function(event) {
+                        const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                        const generatedBase64UriString = event.target.result;
+
+                        const artifactFileStructure = {
+                            id: Date.now(),
+                            title: inputLiteralTitle,
+                            src: generatedBase64UriString
+                        };
+
+                        if(!db.photoVault[AppStateManager.activePetId]) db.photoVault[AppStateManager.activePetId] = [];
+                        db.photoVault[AppStateManager.activePetId].unshift(artifactFileStructure);
+                        
+                        localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                        titleNode.value = "";
+                        fileInputNode.value = "";
+                        UI_Renderer.refreshCurrentPetDashboardVitals();
+                        SessionEngine.dispatchFloatingToastAlert(dict.successSave);
+                    };
+                    fileReaderInstance.readAsDataURL(file);
+                }
+            },
+            purgePhotoAssetItem: function(photoId) {
+                const db = JSON.parse(localStorage.getItem('p_master_local_db'));
+                db.photoVault[AppStateManager.activePetId] = db.photoVault[AppStateManager.activePetId].filter(p => p.id !== photoId);
+                localStorage.setItem('p_master_local_db', JSON.stringify(db));
+                UI_Renderer.refreshCurrentPetDashboardVitals();
+                SessionEngine.dispatchFloatingToastAlert(DictionaryMatrix[AppStateManager.currentLang].toastPhotoDel);
+            }
+        };
+
+        /**
+         * --- MODAL WINDOW LIGHTBOX CONTROL COMPONENT ---
+         */
+        const ModalWindowController = {
+            openSystemModal: function(title, bodyHTML) {
+                document.getElementById('modal-global-title').innerText = title;
+                document.getElementById('modal-global-body').innerHTML = bodyHTML;
+                document.getElementById('btn-modal-close').innerText = DictionaryMatrix[AppStateManager.currentLang].modalClose;
+                document.getElementById('global-app-modal').classList.add('show');
+            },
+            openImageLightboxPreview: function(title, base64Src) {
+                const bodyLayoutHtml = `
+                    <p style="font-weight:600; margin-bottom:10px;">${title}</p>
+                    <img src="${base64Src}" alt="Preview Asset Image">
+                `;
+                this.openSystemModal(DictionaryMatrix[AppStateManager.currentLang].navPhotos, bodyLayoutHtml);
+            },
+            closeSystemModal: function() {
+                document.getElementById('global-app-modal').classList.remove('show');
+            }
+        };
+
+        window.onload = function() {
+            SessionEngine.initializeRuntimeSystem();
+        };
     </script>
 </body>
 </html>
