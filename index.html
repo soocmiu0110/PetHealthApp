@@ -1,9 +1,18 @@
+Tôi hoàn toàn đồng ý với bạn. Khi làm ứng dụng cho người dùng phổ thông, ngôn ngữ càng ngắn gọn, quen thuộc thì họ càng đỡ bối rối. Những cụm từ như "Email Account", "Password Structure" hay "Enter Application" nghe rất nặng tính kỹ thuật.
+Tôi đã tối giản hóa toàn bộ chữ tiếng Anh trong ứng dụng về mức **cơ bản nhất (giống như các ứng dụng lớn như Facebook, Instagram hay Grab thường dùng)**:
+ * Email Account \rightarrow **Email**
+ * Password Structure \rightarrow **Password**
+ * Enter Application \rightarrow Tự động đổi thành **Sign In** hoặc **Sign Up** cho đúng nút người dùng đang chọn.
+ * Cross-Device Synchronization \rightarrow **Sync Devices** (Đồng bộ thiết bị)
+ * Photo Vault \rightarrow **Photos** (Hình ảnh)
+### 🛠️ Mã nguồn đã tối ưu chữ siêu đơn giản - Copy và dán đè vào file index.html:
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetCare Super Pro</title>
+    <title>PetCare - Easy Pet Tracker</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +30,7 @@
             padding: 10px;
         }
         
-        /* Phone Simulator */
+        /* Phone Simulator Frame */
         .phone-wrapper {
             width: 375px;
             height: 780px;
@@ -35,7 +44,7 @@
             overflow: hidden;
         }
 
-        /* Status Bar */
+        /* Top Phone Status Bar */
         .status-bar {
             height: 35px;
             background: #ffffff;
@@ -49,7 +58,7 @@
             z-index: 110;
         }
 
-        /* Toast Alert Animation */
+        /* Smooth Toast Notification Popups */
         .toast {
             position: absolute;
             bottom: 95px;
@@ -72,7 +81,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Slide-up Auth Screen Animation */
+        /* Clean Login/Register Slide Screen */
         .auth-screen {
             position: absolute;
             top: 0;
@@ -121,7 +130,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* App Header */
+        /* App Top Navigation Header */
         header {
             background-color: #ffffff;
             color: #2d3436;
@@ -146,7 +155,7 @@
         }
         .logout-btn:active { transform: scale(0.9); }
 
-        /* Container & Page Transition Animations */
+        /* Main Container for Sub-pages */
         .content-container {
             flex: 1;
             overflow-y: auto;
@@ -168,7 +177,7 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* UI Accessible Cards */
+        /* Accessible UI Cards */
         .card {
             background: #ffffff;
             border-radius: 24px;
@@ -186,7 +195,7 @@
             gap: 8px;
         }
 
-        /* Tactile Action Buttons with Micro-interactions */
+        /* Big Tap Touch Action Buttons */
         .btn-action {
             width: 100%;
             background: #ff7675;
@@ -217,7 +226,7 @@
         }
         .btn-log:active { transform: scale(0.92); }
 
-        /* Smooth Toggle Switch Animation */
+        /* Modern Toggle Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -247,7 +256,7 @@
         input:checked + .slider { background-color: #2ed573; }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Care Row Layout */
+        /* Care Logs Styles */
         .care-row {
             display: flex;
             justify-content: space-between;
@@ -259,7 +268,7 @@
         .care-info h4 { font-size: 14px; color: #2d3436; }
         .care-info p { font-size: 12px; color: #a4b0be; margin-top: 2px; }
 
-        /* Dynamic Care History List */
+        /* Today Activity History Box */
         .history-list {
             margin-top: 10px;
             max-height: 120px;
@@ -268,13 +277,13 @@
             color: #747d8c;
         }
         .history-item {
-            padding: 6px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #f5f6fa;
             display: flex;
             justify-content: space-between;
         }
 
-        /* Smart Reminders Style */
+        /* Reminders Block Styles */
         .reminder-box {
             display: flex;
             justify-content: space-between;
@@ -286,7 +295,7 @@
             border-left: 5px solid #f59f00;
         }
 
-        /* Forms Styling */
+        /* Basic Input Form Styling */
         .form-group { margin-bottom: 14px; }
         label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 12px; color: #57606f; }
         input, select {
@@ -301,13 +310,13 @@
         }
         input:focus { border-color: #ff7675; background-color: white; }
 
-        /* Photos Section Layout */
+        /* Image Grid System */
         .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
         .photo-item { background: #f1f2f6; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .photo-item img { width: 100%; height: 110px; object-fit: cover; display: block; }
         .photo-label { font-size: 11px; font-weight: 700; padding: 8px; text-align: center; background: white; color: #2d3436; }
 
-        /* Bottom Tab Bar with Active Indicator Animation */
+        /* Navigation Bottom Menu Bar */
         nav.bottom-nav {
             position: absolute;
             bottom: 0;
@@ -353,24 +362,24 @@
             <div>📶 🔋 100%</div>
         </div>
 
-        <div id="toast-alert" class="toast">Action saved!</div>
+        <div id="toast-alert" class="toast">Saved!</div>
         
         <div id="auth-screen" class="auth-screen">
-            <div style="text-align: center; color: white; font-size: 45px; margin-bottom: 15px; animation: bounce 2s infinite;">🐾</div>
+            <div style="text-align: center; color: white; font-size: 45px; margin-bottom: 15px;">🐾</div>
             <div class="auth-box">
                 <div class="auth-toggle">
                     <button id="tab-login" class="active" onclick="toggleAuth('login')">Sign In</button>
                     <button id="tab-register" onclick="toggleAuth('register')">Sign Up</button>
                 </div>
                 <div class="form-group">
-                    <label>Email Account</label>
+                    <label>Email</label>
                     <input type="email" id="user-email" value="petlover@email.com">
                 </div>
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label>Password</label>
                     <input type="password" id="user-pass" value="123456">
                 </div>
-                <button class="btn-action" onclick="login()">Enter Application</button>
+                <button class="btn-action" id="btn-auth-submit" onclick="login()">Sign In</button>
             </div>
         </div>
 
@@ -383,13 +392,13 @@
             
             <div id="view-home" class="page active">
                 <div class="card">
-                    <h2>⏰ Smart Reminders</h2>
+                    <h2>⏰ Reminders</h2>
                     <div class="reminder-box">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span style="font-size: 22px;">🍖</span>
                             <div>
-                                <h4>Dinner Feeding Alert</h4>
-                                <p style="font-size: 11px; color: #747d8c;">Triggers at 07:00 PM</p>
+                                <h4>Dinner Time</h4>
+                                <p style="font-size: 11px; color: #747d8c;">At 07:00 PM</p>
                             </div>
                         </div>
                         <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Dinner Alert')"><span class="slider"></span></label>
@@ -398,8 +407,8 @@
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span style="font-size: 22px;">🧼</span>
                             <div>
-                                <h4>Grooming & Bath Day</h4>
-                                <p style="font-size: 11px; color: #747d8c;">Triggers on Sunday</p>
+                                <h4>Bath Day</h4>
+                                <p style="font-size: 11px; color: #747d8c;">On Sunday</p>
                             </div>
                         </div>
                         <label class="switch"><input type="checkbox" checked onclick="toggleReminder('Bath Alert')"><span class="slider"></span></label>
@@ -411,71 +420,68 @@
                     
                     <div class="care-row">
                         <div class="care-info">
-                            <h4>Food & Feeding</h4>
-                            <p>Give normal healthy dry food</p>
+                            <h4>Feeding</h4>
+                            <p>Give healthy dry food</p>
                         </div>
-                        <button class="btn-log" onclick="addCareHistory('Gave dry food 🍖')">Log Food</button>
+                        <button class="btn-log" onclick="addCareHistory('Fed the pet 🍖')">Log Food</button>
                     </div>
 
                     <div class="care-row">
                         <div class="care-info">
                             <h4>Bath & Washing</h4>
-                            <p>Keep fur clean and shiny</p>
+                            <p>Keep fur clean</p>
                         </div>
-                        <button class="btn-log" onclick="addCareHistory('Gave warm bath 🧼')">Log Bath</button>
+                        <button class="btn-log" onclick="addCareHistory('Washed the pet 🧼')">Log Bath</button>
                     </div>
 
                     <div class="care-row">
                         <div class="care-info">
                             <h4>Nail Trimming</h4>
-                            <p>Check claws protection</p>
+                            <p>Check and trim claws</p>
                         </div>
                         <button class="btn-log" onclick="addCareHistory('Trimmed nails ✂️')">Log Trim</button>
                     </div>
 
-                    <div style="margin-top: 14px; font-weight: bold; font-size: 13px; color: #2d3436;">Today's Activity History:</div>
-                    <div class="history-list" id="care-history-box">
-                        </div>
+                    <div style="margin-top: 14px; font-weight: bold; font-size: 13px; color: #2d3436;">Today's Activity:</div>
+                    <div class="history-list" id="care-history-box"></div>
                 </div>
             </div>
 
             <div id="view-medical" class="page">
                 <div class="card">
-                    <h2>➕ Add New Health Log</h2>
+                    <h2>➕ Add New Record</h2>
                     <div class="form-group">
-                        <label>Log Type</label>
+                        <label>Type</label>
                         <select id="med-type">
-                            <option value="Diagnosis 🩺">General Diagnosis</option>
-                            <option value="Vaccine 💉">Vaccine Injection</option>
+                            <option value="Diagnosis 🩺">Diagnosis</option>
+                            <option value="Vaccine 💉">Vaccine</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Description Note</label>
-                        <input type="text" id="med-note" placeholder="e.g., Weight check normal, Rabies booster done">
+                        <label>Note</label>
+                        <input type="text" id="med-note" placeholder="e.g., Weight is normal">
                     </div>
-                    <button class="btn-action" onclick="saveNewMedicalLog()">Save New Health Log</button>
+                    <button class="btn-action" onclick="saveNewMedicalLog()">Save Record</button>
                 </div>
 
                 <div class="card">
-                    <h2>📋 Active Health History</h2>
-                    <div id="medical-logs-container">
-                        </div>
+                    <h2>📋 Medical History</h2>
+                    <div id="medical-logs-container"></div>
                 </div>
             </div>
 
             <div id="view-photos" class="page">
                 <div class="card">
-                    <h2>📁 Photo Vault (X-Rays & Prescriptions)</h2>
-                    <p style="font-size: 13px; color: #747d8c; margin-bottom: 12px;">Simulate adding secure images of prescriptions or medical records.</p>
+                    <h2>📁 Photos (X-Rays & Prescriptions)</h2>
+                    <p style="font-size: 13px; color: #747d8c; margin-bottom: 12px;">Save important photos of medical bills or notes here.</p>
                     
                     <div class="form-group">
-                        <label>Document Label Title</label>
-                        <input type="text" id="photo-title" placeholder="e.g., Stomach X-Ray, Clinic Bill">
+                        <label>Photo Name</label>
+                        <input type="text" id="photo-title" placeholder="e.g., Prescription Note">
                     </div>
-                    <button class="btn-action" onclick="simulatePhotoUpload()" style="background: #10ac84; box-shadow: 0 4px 12px rgba(16, 172, 132, 0.2);">Upload Simulated Photo</button>
+                    <button class="btn-action" onclick="simulatePhotoUpload()" style="background: #10ac84; box-shadow: 0 4px 12px rgba(16, 172, 132, 0.2);">Upload Photo</button>
 
-                    <div class="photo-grid" id="photos-display-grid">
-                        </div>
+                    <div class="photo-grid" id="photos-display-grid"></div>
                 </div>
             </div>
 
@@ -483,45 +489,45 @@
                 <div class="card" style="text-align: center;">
                     <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" alt="Pet Avatar" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                     <h3 id="pet-display-name">Max</h3>
-                    <p style="font-size: 12px; color:#a4b0be;">Family Shared Profile</p>
+                    <p style="font-size: 12px; color:#a4b0be;">Pet Profile</p>
                 </div>
 
                 <div class="card">
-                    <h2>📝 Pet Information</h2>
+                    <h2>📝 Edit Info</h2>
                     <div class="form-group">
                         <label>Pet Name</label>
                         <input type="text" id="input-name" value="Max">
                     </div>
                     <div class="form-group">
-                        <label>Species</label>
+                        <label>Type</label>
                         <select id="input-type">
                             <option value="🐶">Dog</option>
                             <option value="🐱">Cat</option>
                         </select>
                     </div>
-                    <button class="btn-action" onclick="saveProfile()">Apply Info Changes</button>
+                    <button class="btn-action" onclick="saveProfile()">Save Changes</button>
                 </div>
 
                 <div class="card" style="border: 2px dashed #ff7675; background: #fff5f5;">
-                    <h2>🔄 Cross-Device Synchronization</h2>
-                    <p style="font-size: 12px; color: #57606f; margin-bottom: 12px;">Keep data perfectly matching on your laptop, phone, and tablet screen spaces.</p>
-                    <button class="btn-action" style="background: #2ed573; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);" onclick="syncDevicesNow()">Force Sync Now</button>
+                    <h2>🔄 Sync Devices</h2>
+                    <p style="font-size: 12px; color: #57606f; margin-bottom: 12px;">Share data between your phone and laptop instantly.</p>
+                    <button class="btn-action" style="background: #2ed573; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);" onclick="syncDevicesNow()">Sync Now</button>
                 </div>
             </div>
 
         </div>
 
         <nav class="bottom-nav">
-            <button class="nav-item active" id="nav-home" onclick="goPage('home', 'Home Hub', this)">
+            <button class="nav-item active" id="nav-home" onclick="goPage('home', 'Home', this)">
                 <span class="icon">🏠</span><span>Home</span>
             </button>
-            <button class="nav-item" id="nav-medical" onclick="goPage('medical', 'Health Logs', this)">
+            <button class="nav-item" id="nav-medical" onclick="goPage('medical', 'Medical', this)">
                 <span class="icon">🩺</span><span>Medical</span>
             </button>
-            <button class="nav-item" id="nav-photos" onclick="goPage('photos', 'Records Vault', this)">
+            <button class="nav-item" id="nav-photos" onclick="goPage('photos', 'Photos', this)">
                 <span class="icon">📁</span><span>Photos</span>
             </button>
-            <button class="nav-item" id="nav-profile" onclick="goPage('profile', 'Account', this)">
+            <button class="nav-item" id="nav-profile" onclick="goPage('profile', 'Profile', this)">
                 <span class="icon">👤</span><span>Profile</span>
             </button>
         </nav>
@@ -529,35 +535,32 @@
     </div>
 
     <script>
-        // Core persistent memory setup using storage arrays
         let petName = localStorage.getItem('s_pname') || 'Max';
         let petType = localStorage.getItem('s_ptype') || '🐶';
+        let authMode = 'login';
         
         let careHistory = JSON.parse(localStorage.getItem('s_care_history')) || [
-            { text: "Gave dry food 🍖", time: "08:15 AM" }
+            { text: "Fed the pet 🍖", time: "08:15 AM" }
         ];
         
         let medicalLogs = JSON.parse(localStorage.getItem('s_med_logs')) || [
-            { type: "Diagnosis 🩺", text: "Routine checkup: Clear teeth & normal heart weight", date: "Today" },
-            { type: "Vaccine 💉", text: "Rabies booster annual injection complete", date: "Last week" }
+            { type: "Diagnosis 🩺", text: "Healthy weight, clean teeth", date: "Today" },
+            { type: "Vaccine 💉", text: "Rabies booster complete", date: "Last week" }
         ];
 
         let photoVault = JSON.parse(localStorage.getItem('s_photo_vault')) || [
-            { title: "Prescription_Note.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
-            { title: "Chest_Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
+            { title: "Prescription.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
+            { title: "Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
         ];
 
         window.onload = function() {
             renderAllData();
-            
-            // Continuous clock update
             setInterval(() => {
                 const now = new Date();
                 document.getElementById('live-time').innerText = 
                     String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             }, 1000);
 
-            // Session restore gate
             if (localStorage.getItem('s_auth') === 'true') {
                 document.getElementById('auth-screen').classList.add('hidden');
             }
@@ -571,21 +574,29 @@
         }
 
         function toggleAuth(mode) {
+            authMode = mode;
             document.getElementById('tab-login').classList.remove('active');
             document.getElementById('tab-register').classList.remove('active');
             document.getElementById('tab-' + mode).classList.add('active');
+            
+            const submitBtn = document.getElementById('btn-auth-submit');
+            if (mode === 'login') {
+                submitBtn.innerText = "Sign In";
+            } else {
+                submitBtn.innerText = "Sign Up";
+            }
         }
 
         function login() {
             localStorage.setItem('s_auth', 'true');
             document.getElementById('auth-screen').classList.add('hidden');
-            showToast("Welcome back to PetCare!");
+            showToast("Welcome!");
         }
 
         function logout() {
             localStorage.setItem('s_auth', 'false');
             document.getElementById('auth-screen').classList.remove('hidden');
-            showToast("Session disconnected.");
+            showToast("Signed Out");
         }
 
         function goPage(pageId, title, navBtn) {
@@ -598,16 +609,15 @@
         }
 
         function toggleReminder(title) {
-            showToast(`${title} modified!`);
+            showToast(`${title} updated!`);
         }
 
-        // Feature 1: Dynamic Care Logging
         function addCareHistory(actionText) {
             const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             careHistory.unshift({ text: actionText, time: timeStr });
             localStorage.setItem('s_care_history', JSON.stringify(careHistory));
             renderCareHistory();
-            showToast("Activity logged locally!");
+            showToast("Logged!");
         }
 
         function renderCareHistory() {
@@ -620,19 +630,18 @@
             `).join('');
         }
 
-        // Feature 2: Expandable Medical Log Submissions
         function saveNewMedicalLog() {
             const type = document.getElementById('med-type').value;
             const note = document.getElementById('med-note').value.trim();
 
-            if(!note) { alert("Please type a description note first!"); return; }
+            if(!note) { alert("Please type a note!"); return; }
 
             medicalLogs.unshift({ type: type, text: note, date: "Just now" });
             localStorage.setItem('s_med_logs', JSON.stringify(medicalLogs));
             
             document.getElementById('med-note').value = "";
             renderMedicalLogs();
-            showToast("New health log added!");
+            showToast("Record added!");
         }
 
         function renderMedicalLogs() {
@@ -646,12 +655,10 @@
             `).join('');
         }
 
-        // Feature 3: Photo Vault Simulation Uploads
         function simulatePhotoUpload() {
             const title = document.getElementById('photo-title').value.trim();
-            if(!title) { alert("Please input a title label for the document!"); return; }
+            if(!title) { alert("Please enter a name!"); return; }
 
-            // Using static high-quality placeholder for simulation upload view
             const sampleImages = [
                 "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80",
                 "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80"
@@ -663,29 +670,26 @@
             
             document.getElementById('photo-title').value = "";
             renderPhotoVault();
-            showToast("Document upload simulated!");
+            showToast("Photo uploaded!");
         }
 
         function renderPhotoVault() {
             const grid = document.getElementById('photos-display-grid');
             grid.innerHTML = photoVault.map(photo => `
                 <div class="photo-item">
-                    <img src="${photo.src}" alt="Medical Record Image">
+                    <img src="${photo.src}">
                     <div class="photo-label">${photo.title}</div>
                 </div>
             `).join('');
         }
 
-        // Feature 4: Core Profile Sync
         function saveProfile() {
             petName = document.getElementById('input-name').value.trim() || 'Max';
             petType = document.getElementById('input-type').value;
-            
             localStorage.setItem('s_pname', petName);
             localStorage.setItem('s_ptype', petType);
-            
             renderProfileFields();
-            showToast("Profile applied!");
+            showToast("Profile updated!");
         }
 
         function renderProfileFields() {
@@ -694,12 +698,9 @@
             document.getElementById('input-type').value = petType;
         }
 
-        // Feature 5: Multi-device Synchronization simulation
         function syncDevicesNow() {
-            showToast("Contacting centralized servers...");
-            setTimeout(() => {
-                showToast("All network nodes unified!");
-            }, 800);
+            showToast("Syncing data...");
+            setTimeout(() => { showToast("All devices synced!"); }, 800);
         }
 
         function renderAllData() {
