@@ -296,7 +296,7 @@
             background: #f8fafc;
             border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid #giz-e2e8f0;
+            border: 1px solid #e2e8f0;
             border-left: 3px solid #0f172a;
         }
         .reminder-box h4 { font-size: 14px; font-weight: 500; color: #0f172a; }
@@ -317,11 +317,55 @@
         }
         input:focus { border-color: #0f172a; }
 
+        /* Premium Premium Upload Box */
+        .upload-zone {
+            border: 2px dashed #cbd5e1;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 18px;
+        }
+        .upload-zone:hover {
+            border-color: #0f172a;
+            background: #ffffff;
+        }
+        .upload-zone p {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .upload-zone .icon-up {
+            font-size: 22px;
+            color: #94a3b8;
+        }
+
         /* Photo Grid System */
         .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 14px; }
-        .photo-item { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .photo-item { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; position: relative; }
         .photo-item img { width: 100%; height: 115px; object-fit: cover; display: block; }
-        .photo-label { font-size: 11px; font-weight: 500; padding: 10px; text-align: center; background: #ffffff; color: #475569; border-top: 1px solid #e2e8f0; }
+        .photo-label { font-size: 11px; font-weight: 500; padding: 10px; text-align: center; background: #ffffff; color: #475569; border-top: 1px solid #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* Delete Button on Images */
+        .btn-delete-photo {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* Premium Bottom Tab Navigation Menu */
         nav.bottom-nav {
@@ -498,7 +542,15 @@
                         <label>Document Label</label>
                         <input type="text" id="photo-title" placeholder="e.g., Blood Test Result">
                     </div>
-                    <button class="btn-action" onclick="simulatePhotoUpload()">Upload Document</button>
+
+                    <!-- REAL UPLOAD TRIGGER ZONE -->
+                    <div class="upload-zone" onclick="triggerFileSelect()">
+                        <div class="icon-up">📥</div>
+                        <p><strong>Click to upload</strong> or drag file here</p>
+                        <p style="font-size: 11px; color: #94a3b8;">PNG, JPG up to 2MB</p>
+                    </div>
+                    <!-- Hidden input to process files -->
+                    <input type="file" id="real-file-input" accept="image/*" style="display: none;" onchange="handleRealPhotoUpload(this)">
 
                     <div class="photo-grid" id="photos-display-grid"></div>
                 </div>
@@ -570,9 +622,10 @@
             { type: "Vaccine 💉", text: "Core vaccine booster injected", date: "Last week" }
         ];
 
+        // Default placeholders if storage is completely empty
         let photoVault = JSON.parse(localStorage.getItem('s_photo_vault')) || [
-            { title: "Prescription.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
-            { title: "Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
+            { id: 1, title: "Prescription.jpg", src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80" },
+            { id: 2, title: "Xray.png", src: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80" }
         ];
 
         window.onload = function() {
@@ -673,28 +726,66 @@
             `).join('');
         }
 
-        function simulatePhotoUpload() {
-            const title = document.getElementById('photo-title').value.trim();
-            if(!title) { alert("Please input title"); return; }
+        /* --- REAL UPLOAD SYSTEM --- */
+        function triggerFileSelect() {
+            document.getElementById('real-file-input').click();
+        }
 
-            const sampleImages = [
-                "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=300&q=80",
-                "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=300&q=80"
-            ];
-            const randomSrc = sampleImages[Math.floor(Math.random() * sampleImages.length)];
-
-            photoVault.unshift({ title: title + ".jpg", src: randomSrc });
-            localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
+        function handleRealPhotoUpload(input) {
+            const titleInput = document.getElementById('photo-title');
+            let title = titleInput.value.trim();
             
-            document.getElementById('photo-title').value = "";
+            if(!title) {
+                alert("Please input Document Label first before choosing a file.");
+                input.value = ""; // Clear file
+                return;
+            }
+
+            const file = input.files[0];
+            if (file) {
+                // Check limit size to fit localStorage (approx 2MB limit for safety)
+                if(file.size > 2 * 1024 * 1024) {
+                    alert("Image too large. Please select a smaller photo (under 2MB).");
+                    input.value = "";
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64ImageSrc = e.target.result;
+                    
+                    // Add to vault array
+                    const newPhoto = {
+                        id: Date.now(),
+                        title: title + ".jpg",
+                        src: base64ImageSrc
+                    };
+                    
+                    photoVault.unshift(newPhoto);
+                    localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
+                    
+                    // Clear inputs and re-render
+                    titleInput.value = "";
+                    input.value = "";
+                    renderPhotoVault();
+                    showToast("Document Stored");
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function deletePhoto(id) {
+            photoVault = photoVault.filter(photo => photo.id !== id);
+            localStorage.setItem('s_photo_vault', JSON.stringify(photoVault));
             renderPhotoVault();
-            showToast("Photo saved");
+            showToast("Document Removed");
         }
 
         function renderPhotoVault() {
             const grid = document.getElementById('photos-display-grid');
             grid.innerHTML = photoVault.map(photo => `
                 <div class="photo-item">
+                    <button class="btn-delete-photo" onclick="deletePhoto(${photo.id})">✕</button>
                     <img src="${photo.src}">
                     <div class="photo-label">${photo.title}</div>
                 </div>
